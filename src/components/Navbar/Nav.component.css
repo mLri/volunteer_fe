@@ -1,0 +1,108 @@
+.nav__container {
+  display: flex;
+  height: 100%;
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  margin: 0 5px;
+}
+
+.nav__logo__img {
+  width: 30px;
+  height: 30px;
+}
+
+.nav__title {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========================================================================== */
+/* .nav__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 55px;
+  background-color: #1976d2;
+}
+
+.nav__left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  margin: 0 5px;
+}
+
+.nav__logo__img {
+  width: 30px;
+  height: 30px;
+}
+
+.nav__title {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+}
+
+.nav__right {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav__menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav__menu ul {
+  display: flex;
+  list-style-type: none;
+  flex-direction: row;
+}
+
+.nav__menu li {
+  margin: 0 5px;
+}
+
+.nav__menu a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.nav__menu a:hover {
+  color: pink;
+  cursor: pointer;
+}
+
+.nav__login {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  color: #ffffff;
+}
+
+.nav__login:hover {
+  cursor: pointer;
+  color: #000000;
+} */

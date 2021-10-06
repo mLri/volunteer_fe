@@ -1,0 +1,58 @@
+.calendar__weekday {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  background-color: #76ffff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.calendar__date {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.calendar__date .day {
+  border: 1px solid gray;
+  cursor: pointer;
+  padding: 5px;
+  text-align: center;
+}
+
+.dayoff {
+  border: 1px solid gray;
+  padding: 5px;
+  text-align: center;
+  background-color: rgb(194, 194, 194);
+}
+
+.day:hover {
+  background-color: #00cbcc;
+}
+
+.calendar__header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px 0;
+  background-color: #00cbcc;
+}
+
+.calendar__header__month {
+  color: #000000;
+}
+
+.calendar__header__year {
+  color: #000000;
+}
+
+.prev__next__button {
+  color: #000000;
+  cursor: pointer;
+  padding: 0 20px;
+}
+
+.prev__next__button:hover {
+  color: gray;
+}
