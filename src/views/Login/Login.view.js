@@ -66,7 +66,7 @@ function Login(props) {
             type='password'
             value={state.password}
             handleOnChangeFunc={handleInputChangeFunc} />
-          <Button value='Login' />
+          <Button value='Login' bgc="#2da44e" color="#ffffff" />
         </form>
       </div>
     </div>

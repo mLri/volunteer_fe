@@ -47,6 +47,7 @@
   border-radius: 4px;
   padding: 5px 0;
   border-color: rgb(27 31 36 / 15%);
+  margin-top: 15px;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

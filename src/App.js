@@ -12,6 +12,7 @@ import logo from './logo.png'
 import Home from './views/Home/Home.view'
 import Login from './views/Login/Login.view'
 import CreateEvent from './views/CreateEvent/CreateEvent.view'
+import EditEvent from './views/EditEvent/EditEvent.view'
 
 /* import components */
 import Navbar from './components/Navbar/Nav.component'
@@ -41,7 +42,8 @@ function App(props) {
         <Switch>
           <Route path="/" exact render={() => (<Home />)} />
           <Route path="/login" render={() => (<Login />)} />
-          <Route path="/create/event" render={() => (<CreateEvent />)} /> 
+          <Route path="/events/create" render={() => (<CreateEvent />)} /> 
+          <Route path="/events/edit/:event_id" render={() => (<EditEvent />)} /> 
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 /* import css */
 import './Nav.component.css'
@@ -9,7 +10,7 @@ function Navbar({ logo, title }) {
       <div className="nav__logo">
         <img src={logo} className="nav__logo__img" alt="logo" />
       </div>
-      <div className="nav__title">{title}</div>
+      <div className="nav__title"><Link to="/">{title}</Link></div>
     </div >
   )
 }

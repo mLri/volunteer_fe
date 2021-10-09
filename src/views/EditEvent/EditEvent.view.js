@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
+import { useParams } from 'react-router-dom'
 
 import { URL } from '../../global_variable'
 
 /* import css */
-import './CreateEvent.view.css'
+import './EditEvent.view.css'
 
 /* import components */
 import Input from '../../components/Input/Input.component'
@@ -13,9 +14,11 @@ import Calendar from '../../components/Calendar/Calendar.component'
 import Button from '../../components/Button/Button.component'
 import CalendarPreview from '../../components/CalendarPreview/CalendarPreview.component'
 
-function CreateEvent() {
+function EditEvent() {
 
   let history = useHistory()
+
+  const { event_id } = useParams()
 
   const [state, setState] = useState({
     name: '',
@@ -26,26 +29,52 @@ function CreateEvent() {
     calendars: [],
     image: ''
   })
+  const [initState, setInitState] = useState('')
 
+  const [isEditCalendar, setIsEditCalendar] = useState(false)
   const [showStartCalendar, setShowStartCalendar] = useState(false)
   const [showEndCalendar, setShowEndCalendar] = useState(false)
 
   useEffect(() => {
-    if (state.start_date && state.end_date) {
-      const diff_month = monthDiff(state.start_date, state.end_date)
+    getEvent()
+  }, [])
+
+  useEffect(() => {
+    if (isEditCalendar) {
+      const start_date = new Date(state.start_date)
+      const end_date = new Date(state.end_date)
+      const diff_month = monthDiff(start_date, end_date)
       let arr = []
       for (let i = 0; i < diff_month; i++) {
         arr.push({
-          date: new Date(state.start_date.getFullYear(), state.start_date.getMonth() + i, 1),
-          date_of_month: genCalendarReview(state.start_date.getFullYear(), state.start_date.getMonth() + i)
+          date: new Date(start_date.getFullYear(), start_date.getMonth() + i, 1),
+          date_of_month: genCalendarReview(start_date.getFullYear(), start_date.getMonth() + i)
         })
       }
       setState({
         ...state,
-        calendars: arr
+        calendars: [...arr]
       })
     }
   }, [state.start_date, state.end_date])
+
+  const getEvent = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+      const get_event = await axios.get(`${URL}/events/${event_id}`, { headers })
+
+      setState(get_event.data)
+      setInitState(get_event.data)
+    } catch (error) {
+      if (error.response.data.message === 'jwt expired' || error.response.data.message === 'jwt malformed' || error.response.data.message === 'invalid signature' || error.response.data.message === 'Unauthorized') {
+        localStorage.removeItem('token')
+        history.push('/login')
+      }
+    }
+  }
 
   const monthDiff = (start_date, end_date) => {
     let months;
@@ -67,7 +96,6 @@ function CreateEvent() {
       const prev_day_start = day_of_prev_month - (start_day_of_month.getDay() - 1)
 
       for (let i = 0; i < start_day_of_month.getDay(); i++) {
-
         calendar.push(
           {
             date: new Date(year, month - 1, prev_day_start + i),
@@ -85,7 +113,7 @@ function CreateEvent() {
       const d = new Date(year, month, i)
       calendar.push(
         {
-          date: d,
+          date: new Date(year, month, i),
           dayoff_status: (new Date(state.start_date) - d <= 0 && new Date(state.end_date) - d >= 0) ? false : true,
           handle_click: true
         }
@@ -120,6 +148,7 @@ function CreateEvent() {
       ...state,
       start_date: date
     })
+    setIsEditCalendar(true)
     setShowStartCalendar(!showStartCalendar)
   }
 
@@ -128,6 +157,7 @@ function CreateEvent() {
       ...state,
       end_date: date
     })
+    setIsEditCalendar(true)
     setShowEndCalendar(!showEndCalendar)
   }
 
@@ -141,7 +171,7 @@ function CreateEvent() {
 
   const handleClickCalendarReviewFunc = (date, index) => {
     let find_month = state.calendars.find(val => {
-      return val.date.getMonth() == date.getMonth()
+      return new Date(val.date).getMonth() == date.getMonth()
     })
     find_month.date_of_month[index].dayoff_status = !find_month.date_of_month[index].dayoff_status
     setState({
@@ -150,38 +180,37 @@ function CreateEvent() {
     })
   }
 
-  const createEvent = async (e) => {
+  const updateEvent = async (e) => {
     e.preventDefault()
 
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
-    await axios.post(`${URL}/events`, { ...state }, { headers })
+    await axios.patch(`${URL}/events/${event_id}`, { ...state }, { headers })
 
     history.push('/')
   }
 
-  const cancelEvent = () => {
-    setState({
-      name: '',
-      detail: '',
-      start_date: '',
-      end_date: '',
-      unit_per_day: 0,
-      calendars: [],
-      image: ''
+  const cancelEvent = (e) => {
+    e.preventDefault()
+
+    setIsEditCalendar(false)
+    setState(initState)
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
     })
   }
 
   return (
-    <div className="create__event__container">
-      <div className="create__event__content">
-        <div className="create__event__header">
-          <h1>Create event</h1>
+    <div className="edit__event__container">
+      <div className="edit__event__content">
+        <div className="edit__event__header">
+          <h1>Edit event</h1>
         </div>
         <div className="create__event__body">
-          <form onSubmit={createEvent}>
+          <form onSubmit={updateEvent}>
             <label htmlFor="name">ชื่อกิจกรรม</label>
             <Input
               name='name'
@@ -201,7 +230,7 @@ function CreateEvent() {
             <input
               type="text"
               readOnly
-              value={state.start_date.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} />
+              value={new Date(state.start_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} />
             <span className="calendar__toggle" onClick={handleToggleStartCalendar}>&#128197;</span>
             {
               showStartCalendar
@@ -213,7 +242,7 @@ function CreateEvent() {
             <input
               type="text"
               readOnly
-              value={state.end_date.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} />
+              value={new Date(state.end_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} />
             <span className="calendar__toggle" onClick={handleToggleEndCalendar}>&#128197;</span>
             {
               showEndCalendar
@@ -228,7 +257,6 @@ function CreateEvent() {
               value={state.unit_per_day}
               handleOnChangeFunc={handleInputChangeFunc} />
 
-
             {
               state.calendars
               &&
@@ -238,13 +266,17 @@ function CreateEvent() {
                     key={index}
                     date={val.date}
                     date_of_month={val.date_of_month}
-                    handleClickFunc={handleClickCalendarReviewFunc} />
+                    handleClickFunc={handleClickCalendarReviewFunc}
+                  />
                 )
               })
             }
 
-            <div className="create__event__btn">
-              <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
+            <div className="edit__event__btn">
+              <Button
+                value="แก้ไข"
+                bgc="#3f83ff"
+                color="#ffffff" />
               <Button
                 handleSubmitFunc={cancelEvent}
                 value="ยกเลิก"
@@ -252,10 +284,11 @@ function CreateEvent() {
                 color="#ffffff" />
             </div>
           </form>
+
         </div>
       </div>
     </div>
   )
 }
 
-export default CreateEvent
+export default EditEvent

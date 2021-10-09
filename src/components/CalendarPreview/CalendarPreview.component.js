@@ -1,8 +1,9 @@
 /* import css */
 import './CalendarPreview.component.css'
 
-function CalendarPreview({ muid, date, date_of_month, handleClickFunc = () => null }) {
+function CalendarPreview({ date, date_of_month, handleClickFunc = () => null }) {
 
+  const monthCalendar = new Date(date)
   const monthStringArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
   const monthToString = (index) => {
@@ -15,10 +16,10 @@ function CalendarPreview({ muid, date, date_of_month, handleClickFunc = () => nu
       <div className="calendar__review__container">
         <div className="calendar__header">
           <div className="calendar__header__month">
-            <span>{monthToString(date.getMonth())}</span>
+            <span>{monthToString(monthCalendar.getMonth())}</span>
           </div>
           <div className="calendar__header__year">
-            <span>{date.getFullYear()}</span>
+            <span>{monthCalendar.getFullYear()}</span>
           </div>
         </div>
         <div className="calendar__weekday">
@@ -39,8 +40,8 @@ function CalendarPreview({ muid, date, date_of_month, handleClickFunc = () => nu
                 <div
                   className={val.handle_click ? val.dayoff_status ? 'dayoff' : 'day' : 'dayoff__noclick'}
                   key={index}
-                  onClick={() => val.handle_click ? handleClickFunc(muid, val.duid) : null}>
-                  {val.date.getDate()}
+                  onClick={() => val.handle_click ? handleClickFunc(monthCalendar, index) : null}>
+                  {new Date(val.date).getDate()}
                 </div>
               )
             })

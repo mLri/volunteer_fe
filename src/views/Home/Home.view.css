@@ -49,7 +49,7 @@ tbody tr:nth-child(even) {
 }
 
 .event__create a {
-  font-size: 34px;
+  font-size: 24px;
   color: #18ffff;
   text-decoration: none;
 }
@@ -57,4 +57,17 @@ tbody tr:nth-child(even) {
 .event__create a:hover {
   cursor: pointer;
   color: #00cbcc;
+}
+
+.event__create svg:hover {
+  color: #00b248;
+}
+
+.event__delete svg:hover {
+  color: rgb(255, 0, 0);
+  cursor: pointer;
+}
+
+.event__edit svg:hover {
+  cursor: pointer;
 }

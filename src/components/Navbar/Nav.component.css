@@ -17,8 +17,12 @@
 .nav__title {
   display: flex;
   align-items: center;
-  color: #ffffff;
   letter-spacing: 1px;
+}
+
+.nav__title a {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 
