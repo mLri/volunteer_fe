@@ -87,7 +87,7 @@ function CreateEvent() {
         {
           date: d,
           dayoff_status: (new Date(state.start_date) - d <= 0 && new Date(state.end_date) - d >= 0) ? false : true,
-          handle_click: true
+          handle_click: (new Date(state.start_date) - d <= 0 && new Date(state.end_date) - d >= 0) ? true : false
         }
       )
     }
@@ -159,7 +159,7 @@ function CreateEvent() {
     }
     await axios.post(`${URL}/events`, { ...state }, { headers })
 
-    history.push('/')
+    history.push('/admin')
   }
 
   const cancelEvent = (e) => {

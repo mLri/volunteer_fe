@@ -116,7 +116,7 @@ function EditEvent() {
         {
           date: new Date(year, month, i),
           dayoff_status: (new Date(state.start_date) - d <= 0 && new Date(state.end_date) - d >= 0) ? false : true,
-          handle_click: true
+          handle_click: (new Date(state.start_date) - d <= 0 && new Date(state.end_date) - d >= 0) ? true : false
         }
       )
     }
