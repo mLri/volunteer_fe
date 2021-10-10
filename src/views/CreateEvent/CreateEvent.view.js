@@ -141,7 +141,7 @@ function CreateEvent() {
 
   const handleClickCalendarReviewFunc = (date, index) => {
     let find_month = state.calendars.find(val => {
-      return val.date.getMonth() == date.getMonth()
+      return val.date.getMonth() === date.getMonth()
     })
     find_month.date_of_month[index].dayoff_status = !find_month.date_of_month[index].dayoff_status
     setState({
@@ -162,7 +162,9 @@ function CreateEvent() {
     history.push('/')
   }
 
-  const cancelEvent = () => {
+  const cancelEvent = (e) => {
+    e.preventDefault()
+
     setState({
       name: '',
       detail: '',
@@ -171,6 +173,10 @@ function CreateEvent() {
       unit_per_day: 0,
       calendars: [],
       image: ''
+    })
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
     })
   }
 

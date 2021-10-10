@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { useHistory } from 'react-router'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 import { URL } from '../../global_variable'
 
@@ -67,7 +67,8 @@ function EditEvent() {
       const get_event = await axios.get(`${URL}/events/${event_id}`, { headers })
 
       setState(get_event.data)
-      setInitState(get_event.data)
+      /* clone data for cancel event */
+      setInitState(JSON.parse(JSON.stringify(get_event.data)))
     } catch (error) {
       if (error.response.data.message === 'jwt expired' || error.response.data.message === 'jwt malformed' || error.response.data.message === 'invalid signature' || error.response.data.message === 'Unauthorized') {
         localStorage.removeItem('token')
@@ -171,7 +172,7 @@ function EditEvent() {
 
   const handleClickCalendarReviewFunc = (date, index) => {
     let find_month = state.calendars.find(val => {
-      return new Date(val.date).getMonth() == date.getMonth()
+      return new Date(val.date).getMonth() === date.getMonth()
     })
     find_month.date_of_month[index].dayoff_status = !find_month.date_of_month[index].dayoff_status
     setState({
@@ -189,14 +190,15 @@ function EditEvent() {
     }
     await axios.patch(`${URL}/events/${event_id}`, { ...state }, { headers })
 
-    history.push('/')
+    history.push('/admin')
   }
 
   const cancelEvent = (e) => {
     e.preventDefault()
 
     setIsEditCalendar(false)
-    setState(initState)
+    /* clone data cuz we don't want relation object */
+    setState(JSON.parse(JSON.stringify(initState)))
     window.scrollTo({
       top: 0,
       behavior: "smooth"

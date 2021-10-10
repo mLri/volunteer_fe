@@ -33,10 +33,9 @@ function Login(props) {
     const login = await axios.post(`${URL}/auth/signin`, { ...state }, { headers })
 
     localStorage.setItem('token', login.data.access_token)
-    localStorage.setItem('id', login.data._id)
 
     props.dispatch({ type: 'SIGNIN' })
-    history.push('/')
+    history.push('/admin')
   }
 
   const handleInputChangeFunc = (e) => {

@@ -10,7 +10,7 @@ function Navbar({ logo, title }) {
       <div className="nav__logo">
         <img src={logo} className="nav__logo__img" alt="logo" />
       </div>
-      <div className="nav__title"><Link to="/">{title}</Link></div>
+      <div className="nav__title"><Link to="/admin">{title}</Link></div>
     </div >
   )
 }

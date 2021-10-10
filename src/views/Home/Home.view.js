@@ -56,7 +56,7 @@ function Home(props) {
         <div className="event__header">
           <h1>Menage event</h1>
           <div className="event__create">
-            <Link to="/events/create">
+            <Link to="/admin/events/create">
               <FontAwesomeIcon icon={faPlus} color="#00e676"></FontAwesomeIcon>
             </Link>
           </div>
@@ -80,7 +80,7 @@ function Home(props) {
                     <td><a href="/test">รายละเอียด</a></td>
                     <td style={{ textAlign: 'center' }}>
                       <span className="event__edit">
-                        <Link to={`/events/edit/${val._id}`}>
+                        <Link to={`/admin/events/edit/${val._id}`}>
                           <FontAwesomeIcon icon={faEdit} color="blue"></FontAwesomeIcon>
                         </Link>
                       </span>

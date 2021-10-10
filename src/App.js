@@ -40,10 +40,10 @@ function App(props) {
           <LogoutButton title='Logout' logout_to='/login' isLogin={props.auth.isLogin} handleLogout={handleLogout} />
         </div>
         <Switch>
-          <Route path="/" exact render={() => (<Home />)} />
+          <Route path="/admin" exact render={() => (<Home />)} />
           <Route path="/login" render={() => (<Login />)} />
-          <Route path="/events/create" render={() => (<CreateEvent />)} /> 
-          <Route path="/events/edit/:event_id" render={() => (<EditEvent />)} /> 
+          <Route path="/admin/events/create" render={() => (<CreateEvent />)} /> 
+          <Route path="/admin/events/edit/:event_id" render={() => (<EditEvent />)} /> 
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>
