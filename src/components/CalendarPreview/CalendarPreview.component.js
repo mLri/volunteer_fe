@@ -40,7 +40,7 @@ function CalendarPreview({ date, date_of_month, handleClickFunc = () => null }) 
                 <div
                   className={val.handle_click ? val.dayoff_status ? 'dayoff' : 'day' : 'dayoff__noclick'}
                   key={index}
-                  onClick={() => val.handle_click ? handleClickFunc(monthCalendar, index) : null}>
+                  onClick={() => val.handle_click ? handleClickFunc(monthCalendar, index, val.date) : null}>
                   {new Date(val.date).getDate()}
                 </div>
               )

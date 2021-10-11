@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { URL } from '../../global_variable'
+import { URL } from '../../../global_variable'
 
 /* import components */
-import Input from '../../components/Input/Input.component'
-import Button from '../../components/Button/Button.component'
+import Input from '../../../components/Input/Input.component'
+import Button from '../../../components/Button/Button.component'
 
 /* import css */
 import './Login.view.css'

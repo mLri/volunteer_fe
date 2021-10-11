@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { faTrashAlt, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { URL } from '../../global_variable'
+import { URL } from '../../../global_variable'
 
 /* import css */
 import './Home.view.css'

@@ -9,10 +9,12 @@ import './App.css'
 import logo from './logo.png'
 
 /* import views */
-import Home from './views/Home/Home.view'
-import Login from './views/Login/Login.view'
-import CreateEvent from './views/CreateEvent/CreateEvent.view'
-import EditEvent from './views/EditEvent/EditEvent.view'
+import Home from './views/Admin/Home/Home.view'
+import Login from './views/Admin/Login/Login.view'
+import CreateEvent from './views/Admin/CreateEvent/CreateEvent.view'
+import EditEvent from './views/Admin/EditEvent/EditEvent.view'
+import HomeUser from './views/User/Home_User/Home.view'
+import EventDetail from './views/User/EventDetail/EventDetail.view'
 
 /* import components */
 import Navbar from './components/Navbar/Nav.component'
@@ -40,10 +42,12 @@ function App(props) {
           <LogoutButton title='Logout' logout_to='/login' isLogin={props.auth.isLogin} handleLogout={handleLogout} />
         </div>
         <Switch>
+          <Route path="/" exact render={()=> (<HomeUser />)} />
           <Route path="/admin" exact render={() => (<Home />)} />
           <Route path="/login" render={() => (<Login />)} />
           <Route path="/admin/events/create" render={() => (<CreateEvent />)} /> 
           <Route path="/admin/events/edit/:event_id" render={() => (<EditEvent />)} /> 
+          <Route path="/detail/:event_id" render={() => (<EventDetail />)} />
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>

@@ -1,0 +1,34 @@
+.card__container {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+.card__container .card__image img {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.card__title {
+  text-align: center;
+}
+
+.card__detail__btn {
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.card__detail__btn button {
+  width: 100%;
+  border: none;
+  padding: 5px 0;
+}
+
+.card__detail__btn button:hover {
+  background-color: rgb(19 102 255) !important;
+  cursor: pointer;
+}

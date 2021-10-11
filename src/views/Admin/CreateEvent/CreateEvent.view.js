@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 
-import { URL } from '../../global_variable'
+import { URL } from '../../../global_variable'
 
 /* import css */
 import './CreateEvent.view.css'
 
 /* import components */
-import Input from '../../components/Input/Input.component'
-import Calendar from '../../components/Calendar/Calendar.component'
-import Button from '../../components/Button/Button.component'
-import CalendarPreview from '../../components/CalendarPreview/CalendarPreview.component'
+import Input from '../../../components/Input/Input.component'
+import Calendar from '../../../components/Calendar/Calendar.component'
+import Button from '../../../components/Button/Button.component'
+import CalendarPreview from '../../../components/CalendarPreview/CalendarPreview.component'
 
 function CreateEvent() {
 
