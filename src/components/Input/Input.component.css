@@ -1,0 +1,9 @@
+.input__container {
+  width: 100%;
+}
+
+.input__container input {
+  width: 100%;
+  padding: 6px 15px;
+  outline: none;
+}

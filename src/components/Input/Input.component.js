@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 
-function Input({ type = 'text', name = '', placeholder = '', value = '', onFocus = false, autoComplete = "off", handleOnChangeFunc, handleOnClickFunc = () => null }) {
+/* import css */
+import './Input.component.css'
+
+function Input({ type = 'text', name = '', placeholder = '', value = '', onFocus = false, autoComplete = "off", readOnly = false, handleOnChangeFunc, handleOnClickFunc = () => null }) {
 
   const [input, setInput] = useState('')
 
@@ -29,7 +32,8 @@ function Input({ type = 'text', name = '', placeholder = '', value = '', onFocus
         name={name}
         className="input"
         type={type}
-        autoComplete={autoComplete} />
+        autoComplete={autoComplete}
+        readOnly={readOnly} />
     </div>
   )
 }

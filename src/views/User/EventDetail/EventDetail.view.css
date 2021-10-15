@@ -53,3 +53,48 @@
   background-color: gray;
   color: #000000;
 }
+
+
+/* modal */
+.modal__book__event {
+  display: block;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal__book__content {
+  position: relative;
+  background-color: #fefefe;
+  margin: 5% auto; /* 15% from the top and centered */
+  padding: 20px 40px;
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+}
+
+.modal__book__clear {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.modal__book__clear:hover {
+  cursor: pointer;
+}
+
+.modal__book__event__head h2 {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.modal__book__event__btn {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}

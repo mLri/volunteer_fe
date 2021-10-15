@@ -34,13 +34,13 @@ textarea {
   outline: none;
 }
 
-.input__container input {
+.edit__event__container .input__container input {
   width: 100%;
   padding: 6px 20px;
   margin: 8px 0;
 }
 
-input {
+.create__event__container input {
   width: 50%;
   padding: 6px 20px;
   margin: 8px 0;

@@ -1,4 +1,4 @@
-// import './Btn.css'
+import './Button.component.css'
 
 function Btn({ value, handleSubmitFunc = () => null, bgc = 'gray', color = '#000000' }) {
   return (

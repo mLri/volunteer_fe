@@ -68,6 +68,7 @@ function CreateEvent() {
 
       for (let i = 0; i < start_day_of_month.getDay(); i++) {
 
+        //TODO:: change date to '2021-10-14' format every new Date()
         calendar.push(
           {
             date: new Date(year, month - 1, prev_day_start + i),

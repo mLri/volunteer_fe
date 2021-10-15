@@ -1,0 +1,12 @@
+.btn {
+  width: 100%;
+}
+
+.btn button {
+  padding: 5px 10px;
+  border: none;
+}
+
+.btn button:hover {
+  cursor: pointer;
+}

@@ -1,7 +1,7 @@
 .home__container {
   background-color: #eaedf1;
   width: 100%;
-  height: 100vmax;
+  min-height: 100vh;
 }
 
 .home__content {

@@ -38,8 +38,14 @@ function CalendarPreview({ date, date_of_month, handleClickFunc = () => null }) 
               <div
                 className={val.dayoff_status ? 'dayoff__noclick' : 'day'}
                 key={index}
-                onClick={() => !val.dayoff_status ? handleClickFunc(val.date) : null}>
+                onClick={() => !val.dayoff_status ? handleClickFunc(date, index, val.date) : null}>
                 {new Date(val.date).getDate()}
+                {
+                  !val.dayoff_status &&
+                  <div className="day__amont">
+                    ว่าง {val.amont} คน
+                  </div>
+                }
               </div>
             )
           })
