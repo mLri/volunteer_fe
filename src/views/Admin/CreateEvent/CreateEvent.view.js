@@ -22,7 +22,7 @@ function CreateEvent() {
     detail: '',
     start_date: '',
     end_date: '',
-    unit_per_day: 0,
+    unit_per_day: 1,
     calendars: [],
     image: ''
   })
@@ -117,8 +117,13 @@ function CreateEvent() {
   }
 
   const handleClickCalendarStartDateFunc = (date) => {
+    // console.log('year -> ', date.getFullYear())
+    // console.log('month -> ', date.getMonth())
+    // console.log('date => ', date.getDate())
+    // console.log('start_date -> ', new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`))
     setState({
       ...state,
+      // start_date: new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`)
       start_date: date
     })
     setShowStartCalendar(!showStartCalendar)
@@ -127,6 +132,7 @@ function CreateEvent() {
   const handleClickCalendarEndDateFunc = (date) => {
     setState({
       ...state,
+      // end_date: new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`)
       end_date: date
     })
     setShowEndCalendar(!showEndCalendar)
@@ -208,7 +214,9 @@ function CreateEvent() {
             <input
               type="text"
               readOnly
-              value={state.start_date.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} />
+              // value={state.start_date}
+              value={state.start_date.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+            />
             <span className="calendar__toggle" onClick={handleToggleStartCalendar}>&#128197;</span>
             {
               showStartCalendar
@@ -220,7 +228,9 @@ function CreateEvent() {
             <input
               type="text"
               readOnly
-              value={state.end_date.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} />
+              // value={state.end_date}
+              value={state.end_date.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+            />
             <span className="calendar__toggle" onClick={handleToggleEndCalendar}>&#128197;</span>
             {
               showEndCalendar
@@ -251,12 +261,14 @@ function CreateEvent() {
             }
 
             <div className="create__event__btn">
-              <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
-              <Button
-                handleSubmitFunc={cancelEvent}
-                value="ยกเลิก"
-                bgc="red"
-                color="#ffffff" />
+              <div>
+                <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
+                <Button
+                  handleSubmitFunc={cancelEvent}
+                  value="ยกเลิก"
+                  bgc="red"
+                  color="#ffffff" />
+              </div>
             </div>
           </form>
         </div>

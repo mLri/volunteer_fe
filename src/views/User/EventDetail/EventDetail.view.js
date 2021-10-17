@@ -14,6 +14,7 @@ import './EventDetail.view.css'
 import CalendarEventPreview from '../../../components/CalendarEventPreview/CalendarEventPreview.component'
 import Input from '../../../components/Input/Input.component'
 import Button from '../../../components/Button/Button.component'
+import ModalAlert from '../../../components/ModalAlert/ModalAlert.component'
 
 function EventDetail() {
 
@@ -24,9 +25,10 @@ function EventDetail() {
   const [event, setEvent] = useState('')
   const [calendarIdx, setCalendarIdx] = useState(0)
   const [showModal, setShowModal] = useState(false)
+  const [showModalAlertError, setShowModalAlertError] = useState(false)
+  const [showModalAlertSuccess, setShowModalAlertSuccess] = useState(false)
+  const [messageAlert, setMessageAlert] = useState('')
 
-  const [dateSelectedIndex, setDateSelectedIndex] = useState(null)
-  const [monthSelected, setMonthSelected] = useState(null)
 
   const [state, setState] = useState({
     event_id: '',
@@ -56,17 +58,19 @@ function EventDetail() {
     setEvent(event.data)
   }
 
-  const handleCalendarPreviewClick = (month, index, date) => {
-    // let date_obj = new Date(date)
+  const handleCalendarPreviewClick = (month, index, date, amont) => {
+    let date_obj = new Date(date)
     setState({
       ...state,
       event_id: event._id,
-      date_time: new Date(date)
-      // date_time: `${date_obj.getFullYear()}-${date_obj.getMonth()}-${date_obj.getDate()}`
+      date_time: `${date_obj.getFullYear()}-${date_obj.getMonth() + 1}-${date_obj.getDate()}`
     })
-    setDateSelectedIndex(index)
-    setMonthSelected(new Date(month))
-    setShowModal(true)
+
+    if (amont === 0) {
+      //set full madal
+    } else {
+      setShowModal(true)
+    }
   }
 
   const handleClickTap = (index) => {
@@ -94,40 +98,45 @@ function EventDetail() {
     setShowModal(false)
   }
 
+  const handleCloseModalAlertFn = () => {
+    setShowModalAlertError(false)
+    setShowModalAlertSuccess(false)
+    setMessageAlert('')
+  }
+
   const handleSubmitBookEvent = async (e) => {
     e.preventDefault()
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+      await axios.post(`${URL}/book_events`, { ...state }, { headers })
 
-    const headers = {
-      'Content-Type': 'application/json',
-      // 'Authorization': 'Bearer ' + localStorage.getItem('token')
+      getEvent()
+
+      setState({
+        event_id: '',
+        employee_id: '',
+        prefix: '',
+        firstname: '',
+        lastname: '',
+        institution: '',
+        tel: '',
+        date_time: ''
+      })
+      setShowModal(false)
+      setShowModalAlertSuccess(true)
+      setMessageAlert('Book success.')
+
+      setTimeout(function(){
+        setShowModalAlertSuccess(false)
+        setMessageAlert('')
+      }, 2000)
+    } catch (error) {
+      setMessageAlert(error.response.data.message)
+      setShowModalAlertError(true)
     }
-    await axios.post(`${URL}/book_events`, { ...state }, { headers })
-
-    /* decrease amont */
-    let find_month = event.calendars.find(val => {
-      return new Date(val.date).getMonth() === monthSelected.getMonth()
-    })
-    --find_month.date_of_month[dateSelectedIndex].amont
-    setEvent({
-      ...event,
-      calendars: event.calendars
-    })
-
-    await axios.patch(`${URL}/events/${event_id}`, { ...event }, { headers })
-
-    setState({
-      event_id: '',
-      employee_id: '',
-      prefix: '',
-      firstname: '',
-      lastname: '',
-      institution: '',
-      tel: '',
-      date_time: ''
-    })
-    setDateSelectedIndex(null)
-    setMonthSelected(null)
-    setShowModal(false)
   }
 
   return (
@@ -167,6 +176,7 @@ function EventDetail() {
             event.calendars &&
             <CalendarEventPreview
               handleClickFunc={handleCalendarPreviewClick}
+              amont={event.unit_per_day}
               date={event.calendars[calendarIdx].date}
               date_of_month={event.calendars[calendarIdx].date_of_month} />
           }
@@ -244,6 +254,16 @@ function EventDetail() {
             </div>
           </div>
         </div>
+      }
+
+      {
+        showModalAlertError &&
+        <ModalAlert message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
+      }
+
+      {
+        showModalAlertSuccess &&
+        <ModalAlert type="success" message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
       }
 
     </div >

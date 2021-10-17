@@ -78,7 +78,14 @@
   color: red;
 }
 
-.day__amont {
-  font-size: 12px;
+.day__amont p {
+  font-size: 10px;
+}
+
+.day__amont p.empty {
+  color: green;
+}
+
+.day__amont p.full {
   color: red;
 }

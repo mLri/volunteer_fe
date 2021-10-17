@@ -78,13 +78,13 @@
   width: 60%; /* Could be more or less, depending on screen size */
 }
 
-.modal__book__clear {
+.modal__book__content .modal__book__clear {
   position: absolute;
   right: 5px;
   top: 5px;
 }
 
-.modal__book__clear:hover {
+.modal__book__content .modal__book__clear:hover {
   cursor: pointer;
 }
 

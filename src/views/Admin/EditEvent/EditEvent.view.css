@@ -80,3 +80,8 @@ textarea {
   justify-content: right;
   margin-top: 20px;
 }
+
+.edit__event__btn div {
+  display: flex;
+  justify-content: right;
+}

@@ -275,15 +275,17 @@ function EditEvent() {
             }
 
             <div className="edit__event__btn">
-              <Button
-                value="แก้ไข"
-                bgc="#3f83ff"
-                color="#ffffff" />
-              <Button
-                handleSubmitFunc={cancelEvent}
-                value="ยกเลิก"
-                bgc="red"
-                color="#ffffff" />
+              <div>
+                <Button
+                  value="แก้ไข"
+                  bgc="#3f83ff"
+                  color="#ffffff" />
+                <Button
+                  handleSubmitFunc={cancelEvent}
+                  value="ยกเลิก"
+                  bgc="red"
+                  color="#ffffff" />
+              </div>
             </div>
           </form>
 

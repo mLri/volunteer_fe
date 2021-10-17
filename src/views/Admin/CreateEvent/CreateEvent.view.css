@@ -79,3 +79,8 @@ textarea {
   display: flex;
   justify-content: right;
 }
+
+.create__event__btn div {
+  display: flex;
+  justify-content: right;
+}

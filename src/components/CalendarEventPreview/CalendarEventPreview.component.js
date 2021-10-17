@@ -1,7 +1,7 @@
 /* import css */
 import './CalendarEventPreview.component.css'
 
-function CalendarPreview({ date, date_of_month, handleClickFunc = () => null }) {
+function CalendarPreview({ date, amont, date_of_month, handleClickFunc = () => null }) {
 
   const monthCalendar = new Date(date)
   const monthStringArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -38,12 +38,22 @@ function CalendarPreview({ date, date_of_month, handleClickFunc = () => null }) 
               <div
                 className={val.dayoff_status ? 'dayoff__noclick' : 'day'}
                 key={index}
-                onClick={() => !val.dayoff_status ? handleClickFunc(date, index, val.date) : null}>
+                onClick={() => !val.dayoff_status ? handleClickFunc(date, index, val.date, val.amont) : null}>
                 {new Date(val.date).getDate()}
                 {
                   !val.dayoff_status &&
                   <div className="day__amont">
-                    ว่าง {val.amont} คน
+                    {
+                      !val.amont && val.amont !== 0
+                      ?
+                      <p className="empty">ว่าง {amont} คน</p>
+                      :
+                      val.amont === 0 ?
+                        <p className="full">เต็ม</p>
+                        :
+                        <p className="empty">ว่าง {val.amont} คน</p>
+                      
+                    }
                   </div>
                 }
               </div>

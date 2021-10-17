@@ -1,0 +1,45 @@
+.modal__alert__container {
+  display: block;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal__alert__content {
+  position: relative;
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px 40px;
+  border: 1px solid #888;
+  width: 50%;
+  border-radius: 10px;
+}
+
+.modal__alert__clear {
+  /* position: absolute;
+  right: 5px;
+  top: 5px; */
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.modal__alert__head h2 {
+  font-size: 2rem;
+}
+
+.modal__alert__head, .modal__alert__body {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.modal__alert__clear:hover {
+  cursor: pointer;
+}
