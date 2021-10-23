@@ -77,10 +77,14 @@ function Home(props) {
                 props.event.map((val, index) => (
                   <tr key={index}>
                     <td>{val.name}</td>
-                    <td><a href="/test">รายละเอียด</a></td>
+                    <td>
+                      <Link to={`/admin/events/${val._id}/book`}>
+                        รายละเอียด
+                      </Link>
+                    </td>
                     <td style={{ textAlign: 'center' }}>
                       <span className="event__edit">
-                        <Link to={`/admin/events/edit/${val._id}`}>
+                        <Link to={`/admin/events/${val._id}/edit`}>
                           <FontAwesomeIcon icon={faEdit} color="blue"></FontAwesomeIcon>
                         </Link>
                       </span>

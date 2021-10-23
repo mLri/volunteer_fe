@@ -9,10 +9,14 @@ import './App.css'
 import logo from './logo.png'
 
 /* import views */
+/* admin */
 import Home from './views/Admin/Home/Home.view'
 import Login from './views/Admin/Login/Login.view'
 import CreateEvent from './views/Admin/CreateEvent/CreateEvent.view'
 import EditEvent from './views/Admin/EditEvent/EditEvent.view'
+import EventBook from './views/Admin/EventBook/EventBook.view'
+import EventBookEdit from './views/Admin/EventBookEdit/EventBookEdit.view'
+/* user */
 import HomeUser from './views/User/Home_User/Home.view'
 import EventDetail from './views/User/EventDetail/EventDetail.view'
 
@@ -46,7 +50,9 @@ function App(props) {
           <Route path="/admin" exact render={() => (<Home />)} />
           <Route path="/login" render={() => (<Login />)} />
           <Route path="/admin/events/create" render={() => (<CreateEvent />)} /> 
-          <Route path="/admin/events/edit/:event_id" render={() => (<EditEvent />)} /> 
+          <Route path="/admin/events/:event_id/edit" render={() => (<EditEvent />)} /> 
+          <Route path="/admin/events/:event_id/book" exact render={() => (<EventBook />)} /> 
+          <Route path="/admin/events/:event_id/book/:book_event_id/edit" render={() => (<EventBookEdit />)} /> 
           <Route path="/detail/:event_id" render={() => (<EventDetail />)} />
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>

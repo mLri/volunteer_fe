@@ -1,7 +1,7 @@
 /* import css */
 import './CalendarEventPreview.component.css'
 
-function CalendarPreview({ date, amont, date_of_month, handleClickFunc = () => null }) {
+function CalendarPreview({ date, amont, date_of_month, show_amount = true, handleClickFunc = () => null }) {
 
   const monthCalendar = new Date(date)
   const monthStringArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -41,7 +41,7 @@ function CalendarPreview({ date, amont, date_of_month, handleClickFunc = () => n
                 onClick={() => !val.dayoff_status ? handleClickFunc(date, index, val.date, val.amont) : null}>
                 {new Date(val.date).getDate()}
                 {
-                  !val.dayoff_status &&
+                  (!val.dayoff_status && show_amount) &&
                   <div className="day__amont">
                     {
                       !val.amont && val.amont !== 0

@@ -1,0 +1,78 @@
+.event__book__container {
+  width: 100%;
+  height: 100vh;
+  background-color: #eaedf1;
+}
+
+.event__book__content {
+  width: 70%;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px;
+}
+
+.event__book__header {
+  display: block;
+  width: 100%;
+  padding: 40px 0;
+}
+
+.event__book__header h1 {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.event__book__body {
+  width: 100%;
+  display: block;
+}
+
+.event__book__table {
+  width: 100%;
+  display: block;
+}
+
+.event__book__table__head {
+  color: #ffffff;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr;
+  padding: 5px;
+  background-color: #0072ff;
+  text-align: center;
+}
+
+.event__book__table__body__colum__empty {
+  text-align: center;
+  padding: 10px;
+}
+
+.event__book__table__body__row {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr;
+  padding: 5px;
+  border-bottom: 1px solid #c5c5c5;
+  align-items: center;
+}
+
+.event__book__table__body__row:hover {
+  background-color: #dbdbdb;
+}
+
+.event__book__table__body__colum__delete {
+  text-align: center;
+}
+
+.event__book__table__edit,
+.event__book__table__delete {
+  text-align: center;
+}
+
+.event__book__table__edit svg:hover,
+.event__book__table__delete svg:hover {
+  cursor: pointer;
+}
+
+.event__book__table__delete svg:hover {
+  color: rgb(255, 0, 0) !important;
+}
