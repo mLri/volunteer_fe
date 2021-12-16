@@ -3,7 +3,7 @@ import { useHistory } from 'react-router'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import css */
 import './EditEvent.view.css'
@@ -13,6 +13,7 @@ import Input from '../../../components/Input/Input.component'
 import Calendar from '../../../components/Calendar/Calendar.component'
 import Button from '../../../components/Button/Button.component'
 import CalendarPreview from '../../../components/CalendarPreview/CalendarPreview.component'
+import Upload from '../../../components/Upload/Upload.component'
 
 function EditEvent() {
 
@@ -21,6 +22,7 @@ function EditEvent() {
   const { event_id } = useParams()
 
   const [state, setState] = useState({
+    _id: '',
     name: '',
     detail: '',
     start_date: '',
@@ -30,7 +32,8 @@ function EditEvent() {
     image: ''
   })
   const [initState, setInitState] = useState('')
-
+  const [img, setImg] = useState(null)
+  const [previewImg, setPreviewImg] = useState(null)
   const [isEditCalendar, setIsEditCalendar] = useState(false)
   const [showStartCalendar, setShowStartCalendar] = useState(false)
   const [showEndCalendar, setShowEndCalendar] = useState(false)
@@ -64,7 +67,7 @@ function EditEvent() {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      const get_event = await axios.get(`${URL}/events/${event_id}`, { headers })
+      const get_event = await axios.get(`${URL_API}/events/${event_id}`, { headers })
 
       setState(get_event.data)
       /* clone data for cancel event */
@@ -184,11 +187,22 @@ function EditEvent() {
   const updateEvent = async (e) => {
     e.preventDefault()
 
+    const formData = new FormData()
+
+    if (img) formData.append('image', img, img.name)
+
+    formData.append('name', state.name)
+    formData.append('detail', state.detail)
+    formData.append('start_date', state.start_date)
+    formData.append('end_date', state.end_date)
+    formData.append('unit_per_day', state.unit_per_day)
+    formData.append('calendars', JSON.stringify(state.calendars))
+
     const headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
-    await axios.patch(`${URL}/events/${event_id}`, { ...state }, { headers })
+    await axios.patch(`${URL_API}/events/${event_id}`, formData, { headers })
 
     history.push('/admin')
   }
@@ -203,6 +217,11 @@ function EditEvent() {
       top: 0,
       behavior: "smooth"
     })
+  }
+
+  const handleOnUploadImg = async (e) => {
+    setPreviewImg(URL.createObjectURL(e.target.files[0]))
+    setImg(e.target.files[0])
   }
 
   return (
@@ -227,6 +246,11 @@ function EditEvent() {
               name="detail"
               cols="30"
               rows="5"></textarea>
+
+            <label htmlFor="image">รูปกิจกรรม</label>
+            <Upload
+              handleOnChangeFunc={handleOnUploadImg} />
+            <img className="preview__img" src={previewImg || `${URL_API}/events/files/img/${state._id}`} />
 
             <label htmlFor="start_date">วันที่เริ่มกิจกรรม</label>
             <input

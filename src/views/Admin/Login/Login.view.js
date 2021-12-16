@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import components */
 import Input from '../../../components/Input/Input.component'
@@ -30,7 +30,7 @@ function Login(props) {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
-    const login = await axios.post(`${URL}/auth/signin`, { ...state }, { headers })
+    const login = await axios.post(`${URL_API}/auth/signin`, { ...state }, { headers })
 
     localStorage.setItem('token', login.data.access_token)
 

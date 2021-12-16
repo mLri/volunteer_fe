@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { faTrashAlt, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import css */
 import './Home.view.css'
@@ -26,7 +26,7 @@ function Home(props) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      const get_events = await axios.get(`${URL}/events?fields=_id,name`, { headers })
+      const get_events = await axios.get(`${URL_API}/events?fields=_id,name`, { headers })
 
       props.dispatch({ type: 'SET_EVENTS', payload: get_events.data })
     } catch (error) {
@@ -43,7 +43,7 @@ function Home(props) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      await axios.delete(`${URL}/events/${event_id}`, { headers })
+      await axios.delete(`${URL_API}/events/${event_id}`, { headers })
 
       const delete_event = props.event.filter(val => val._id !== event_id)
       props.dispatch({ type: 'SET_EVENTS', payload: delete_event })

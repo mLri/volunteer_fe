@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import css */
 import './EventBookEdit.view.css'
@@ -44,7 +44,7 @@ function EventBookEdit() {
       return new Promise((resolve, reject) => {
         const headers = { 'Content-Type': 'application/json' }
         return axios({
-          url: `${URL}/book_events/${book_event_id}`,
+          url: `${URL_API}/book_events/${book_event_id}`,
           headers: headers,
           timeout: 10000,
           method: 'GET'
@@ -64,7 +64,7 @@ function EventBookEdit() {
       return new Promise((resolve, reject) => {
         const headers = { 'Content-Type': 'application/json' }
         return axios({
-          url: `${URL}/events/${event_id}`,
+          url: `${URL_API}/events/${event_id}`,
           headers: headers,
           timeout: 10000,
           method: 'GET'
@@ -99,7 +99,7 @@ function EventBookEdit() {
     e.preventDefault()
     try {
       const headers = { 'Content-Type': 'application/json' }
-      await axios.patch(`${URL}/book_events/${state._id}`, { ...state }, { headers })
+      await axios.patch(`${URL_API}/book_events/${state._id}`, { ...state }, { headers })
 
       setShowModalAlertSuccess(true)
       setMessageAlert('Update data success.')

@@ -6,11 +6,11 @@ import img_default from '../../img_default.png'
 /* import components */
 import Button from '../Button/Button.component'
 
-function Card({ _id, title, handleClick = () => null }) {
+function Card({ img_url = null, title, handleClick = () => null }) {
   return (
     <div className="card__container">
       <div className="card__image">
-        <img src={img_default} alt="image event" />
+        <img src={img_url || img_default} alt="image event" />
       </div>
       <div className="card__title">{title}</div>
       <div className="card__detail__btn">

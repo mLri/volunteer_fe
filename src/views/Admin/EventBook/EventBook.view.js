@@ -8,7 +8,7 @@ import axios from 'axios'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import css */
 import './EventBook.view.css'
@@ -28,7 +28,7 @@ function EventBook() {
       const headers = {
         'Content-Type': 'application/json',
       }
-      const get_book_events = await axios.get(`${URL}/book_events?event_id=${event_id}`, { headers })
+      const get_book_events = await axios.get(`${URL_API}/book_events?event_id=${event_id}`, { headers })
       setState(get_book_events.data)
     } catch (error) {
       console.log('error -> ', error)
@@ -40,7 +40,7 @@ function EventBook() {
       const headers = {
         'Content-Type': 'application/json',
       }
-      await axios.delete(`${URL}/book_events/${event_id}`, { headers })
+      await axios.delete(`${URL_API}/book_events/${event_id}`, { headers })
 
       const delete_event = state.filter(val => val._id !== event_id)
       setState(delete_event)

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router'
 
 import axios from 'axios'
 
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import css */
 import './Home.view.css'
@@ -27,7 +27,7 @@ function Home() {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      const get_events = await axios.get(`${URL}/events`, { headers })
+      const get_events = await axios.get(`${URL_API}/events`, { headers })
 
       setEvents(get_events.data)
     } catch (error) {
@@ -47,7 +47,7 @@ function Home() {
           events &&
           events.map((val, index) => (
             <div className="card" key={index}>
-              <Card title={val.name} handleClick={() => handleClickCard(val._id)} />
+              <Card img_url={`${URL_API}/events/files/img/${val._id}`} title={val.name} handleClick={() => handleClickCard(val._id)} />
             </div>
           ))
         }

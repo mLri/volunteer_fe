@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-import { URL } from '../../../global_variable'
-import img_default from '../../../img_default.png'
-
+import { URL_API } from '../../../global_variable'
 import { MdClear } from 'react-icons/md'
 
 /* import css */
@@ -54,7 +52,7 @@ function EventDetail() {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
-    const event = await axios.get(`${URL}/events/${event_id}`, { headers })
+    const event = await axios.get(`${URL_API}/events/${event_id}`, { headers })
     setEvent(event.data)
   }
 
@@ -111,7 +109,7 @@ function EventDetail() {
         'Content-Type': 'application/json',
         // 'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      await axios.post(`${URL}/book_events`, { ...state }, { headers })
+      await axios.post(`${URL_API}/book_events`, { ...state }, { headers })
 
       getEvent()
 
@@ -129,7 +127,7 @@ function EventDetail() {
       setShowModalAlertSuccess(true)
       setMessageAlert('Book success.')
 
-      setTimeout(function(){
+      setTimeout(function () {
         setShowModalAlertSuccess(false)
         setMessageAlert('')
       }, 2000)
@@ -139,132 +137,137 @@ function EventDetail() {
     }
   }
 
+  function createMarkup() {
+    return {__html: '<svg onload=alert(1337)>'};
+  }
+
   return (
     <div className="event__detail__container">
       <div className="event__detail__content">
         <div className="event__detail__img">
-          <img src={img_default} alt="" />
+          <img src={`${URL_API}/events/files/img/${event_id}`} alt="" />
         </div>
         <div className="event__detail__detail">
-          <p>
+          <div dangerouslySetInnerHTML={createMarkup()}></div>
+        {/* <p>
             {
               event.detail
             }
-          </p>
-        </div>
-        <div className="event__detail__period">
-          <p>กิจกรรมเริ่มวันที่ : {new Date(event.start_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-          <p>กิจกรรมสิ้นสุดวันที่ : {new Date(event.end_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-        </div>
-        <div className="event__detail__calendar__tap">
-          {
-            event.calendars &&
-            event.calendars.map((val, index) => {
-              return (
-                <div
-                  onClick={() => handleClickTap(index)}
-                  key={index}
-                  className="tap">
-                  {monthToString(new Date(val.date).getMonth())}
-                </div>
-              )
-            })
-          }
-        </div>
-        <div className="event__detail__calendar">
-          {
-            event.calendars &&
-            <CalendarEventPreview
-              handleClickFunc={handleCalendarPreviewClick}
-              amont={event.unit_per_day}
-              date={event.calendars[calendarIdx].date}
-              date_of_month={event.calendars[calendarIdx].date_of_month} />
-          }
-        </div>
+          </p> */}
       </div>
+      <div className="event__detail__period">
+        <p>กิจกรรมเริ่มวันที่ : {new Date(event.start_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        <p>กิจกรรมสิ้นสุดวันที่ : {new Date(event.end_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      </div>
+      <div className="event__detail__calendar__tap">
+        {
+          event.calendars &&
+          event.calendars.map((val, index) => {
+            return (
+              <div
+                onClick={() => handleClickTap(index)}
+                key={index}
+                className="tap">
+                {monthToString(new Date(val.date).getMonth())}
+              </div>
+            )
+          })
+        }
+      </div>
+      <div className="event__detail__calendar">
+        {
+          event.calendars &&
+          <CalendarEventPreview
+            handleClickFunc={handleCalendarPreviewClick}
+            amont={event.unit_per_day}
+            date={event.calendars[calendarIdx].date}
+            date_of_month={event.calendars[calendarIdx].date_of_month} />
+        }
+      </div>
+    </div>
 
       {
-        showModal &&
-        < div className="modal__book__event">
-          <div className="modal__book__content">
-            <div onClick={handleClearModal} className="modal__book__clear">
-              <MdClear color="red" size="2em" />
-            </div>
-            <div className="modal__book__event__head">
-              <h2>ลงทะเบียนจิตอาสา</h2>
-            </div>
-            <div className="modal__book__event__body">
-              <form onSubmit={handleSubmitBookEvent}>
-                <label htmlFor="employee_id">รหัสพนักงาน</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.employee_id}
-                  name="employee_id"
-                  placeholder="รหัสพนักงาน" />
+    showModal &&
+      < div className="modal__book__event">
+        <div className="modal__book__content">
+          <div onClick={handleClearModal} className="modal__book__clear">
+            <MdClear color="red" size="2em" />
+          </div>
+          <div className="modal__book__event__head">
+            <h2>ลงทะเบียนจิตอาสา</h2>
+          </div>
+          <div className="modal__book__event__body">
+            <form onSubmit={handleSubmitBookEvent}>
+              <label htmlFor="employee_id">รหัสพนักงาน</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.employee_id}
+                name="employee_id"
+                placeholder="รหัสพนักงาน" />
 
-                <label htmlFor="prefix">คำนำหน้า</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.prefix}
-                  name="prefix"
-                  placeholder="นาย / นาง / นางสาว" />
+              <label htmlFor="prefix">คำนำหน้า</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.prefix}
+                name="prefix"
+                placeholder="นาย / นาง / นางสาว" />
 
-                <label htmlFor="firstname">ชื่อ</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.firstname}
-                  name="firstname"
-                  placeholder="ชื่อ" />
+              <label htmlFor="firstname">ชื่อ</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.firstname}
+                name="firstname"
+                placeholder="ชื่อ" />
 
-                <label htmlFor="lastname">นามสกุล</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.lastname}
-                  name="lastname"
-                  placeholder="นามสกุล" />
+              <label htmlFor="lastname">นามสกุล</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.lastname}
+                name="lastname"
+                placeholder="นามสกุล" />
 
-                <label htmlFor="institution">สังกัด</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.institution}
-                  name="institution"
-                  placeholder="ศคบ" />
+              <label htmlFor="institution">สังกัด</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.institution}
+                name="institution"
+                placeholder="ศคบ" />
 
-                <label htmlFor="tel">เบอร์โทร</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.tel}
-                  name="tel"
-                  placeholder="09x-xxxxxxx" />
+              <label htmlFor="tel">เบอร์โทร</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.tel}
+                name="tel"
+                placeholder="09x-xxxxxxx" />
 
-                <label htmlFor="date_time">วันที่อาสา</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.date_time.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  readOnly
-                  name="date_time" />
+              <label htmlFor="date_time">วันที่อาสา</label>
+              <Input
+                handleOnChangeFunc={handleInputChange}
+                value={state.date_time.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+                readOnly
+                name="date_time" />
 
-                <div className="modal__book__event__btn">
-                  <div className="btn__submit">
-                    <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
-                  </div>
+              <div className="modal__book__event__btn">
+                <div className="btn__submit">
+                  <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
                 </div>
+              </div>
 
-              </form>
-            </div>
+            </form>
           </div>
         </div>
-      }
+      </div>
+  }
 
-      {
-        showModalAlertError &&
-        <ModalAlert message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
-      }
+  {
+    showModalAlertError &&
+      <ModalAlert message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
+  }
 
-      {
-        showModalAlertSuccess &&
-        <ModalAlert type="success" message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
-      }
+  {
+    showModalAlertSuccess &&
+      <ModalAlert type="success" message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
+  }
 
     </div >
   )

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 
-import { URL } from '../../../global_variable'
+import { URL_API } from '../../../global_variable'
 
 /* import css */
 import './CreateEvent.view.css'
@@ -12,6 +12,7 @@ import Input from '../../../components/Input/Input.component'
 import Calendar from '../../../components/Calendar/Calendar.component'
 import Button from '../../../components/Button/Button.component'
 import CalendarPreview from '../../../components/CalendarPreview/CalendarPreview.component'
+import Upload from '../../../components/Upload/Upload.component'
 
 function CreateEvent() {
 
@@ -26,6 +27,10 @@ function CreateEvent() {
     calendars: [],
     image: ''
   })
+
+  const [img, setImg] = useState(null)
+
+  const [previewImg, setPreviewImg] = useState(null)
 
   const [showStartCalendar, setShowStartCalendar] = useState(false)
   const [showEndCalendar, setShowEndCalendar] = useState(false)
@@ -160,11 +165,22 @@ function CreateEvent() {
   const createEvent = async (e) => {
     e.preventDefault()
 
+    const formData = new FormData()
+
+    if (img) formData.append('image', img, img.name)
+
+    formData.append('name', state.name)
+    formData.append('detail', state.detail)
+    formData.append('start_date', state.start_date)
+    formData.append('end_date', state.end_date)
+    formData.append('unit_per_day', state.unit_per_day)
+    formData.append('calendars', JSON.stringify(state.calendars))
+
     const headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": 'multipart/form-data',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
-    await axios.post(`${URL}/events`, { ...state }, { headers })
+    await axios.post(`${URL_API}/events`, formData, { headers })
 
     history.push('/admin')
   }
@@ -185,6 +201,11 @@ function CreateEvent() {
       top: 0,
       behavior: "smooth"
     })
+  }
+
+  const handleOnUploadImg = async (e) => {
+    setPreviewImg(URL.createObjectURL(e.target.files[0]))
+    setImg(e.target.files[0])
   }
 
   return (
@@ -209,6 +230,11 @@ function CreateEvent() {
               name="detail"
               cols="30"
               rows="5"></textarea>
+
+            <label htmlFor="image">รูปกิจกรรม</label>
+            <Upload
+              handleOnChangeFunc={handleOnUploadImg} />
+            <img className="preview__img" src={previewImg} />
 
             <label htmlFor="start_date">วันที่เริ่มกิจกรรม</label>
             <input
