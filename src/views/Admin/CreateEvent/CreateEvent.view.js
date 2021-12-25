@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import { URL_API } from '../../../global_variable'
 
 /* import css */
@@ -20,7 +26,7 @@ function CreateEvent() {
 
   const [state, setState] = useState({
     name: '',
-    detail: '',
+    detail: EditorState.createEmpty(),
     start_date: '',
     end_date: '',
     unit_per_day: 1,
@@ -28,10 +34,10 @@ function CreateEvent() {
     image: ''
   })
 
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
   const [img, setImg] = useState(null)
-
   const [previewImg, setPreviewImg] = useState(null)
-
   const [showStartCalendar, setShowStartCalendar] = useState(false)
   const [showEndCalendar, setShowEndCalendar] = useState(false)
 
@@ -170,7 +176,8 @@ function CreateEvent() {
     if (img) formData.append('image', img, img.name)
 
     formData.append('name', state.name)
-    formData.append('detail', state.detail)
+    formData.append('detail', JSON.stringify(convertToRaw(state.detail.getCurrentContent())))
+    // formData.append('detail', state.detail)
     formData.append('start_date', state.start_date)
     formData.append('end_date', state.end_date)
     formData.append('unit_per_day', state.unit_per_day)
@@ -208,6 +215,13 @@ function CreateEvent() {
     setImg(e.target.files[0])
   }
 
+  const onEditorStateChange = (edit) => {
+    setState({
+      ...state,
+      detail: edit
+    })
+  }
+
   return (
     <div className="create__event__container">
       <div className="create__event__content">
@@ -224,17 +238,32 @@ function CreateEvent() {
               handleOnChangeFunc={handleInputChangeFunc} />
 
             <label htmlFor="detail">รายละเอียดกิจกรรม</label>
+            <Editor
+              editorStyle={{ border: "1px solid #F1F1F1" }}
+              editorState={state.detail}
+              wrapperClassName="wrapper-class"
+              editorClassName="editor-class"
+              toolbarClassName="toolbar-class"
+              onEditorStateChange={onEditorStateChange}
+            />
             <textarea
+              disabled
+              value={draftToHtml(convertToRaw(state.detail.getCurrentContent()))}
+            />
+            {/* <textarea
               onChange={handleInputChangeFunc}
               value={state.detail}
               name="detail"
               cols="30"
-              rows="5"></textarea>
+              rows="5"></textarea> */}
 
             <label htmlFor="image">รูปกิจกรรม</label>
             <Upload
               handleOnChangeFunc={handleOnUploadImg} />
-            <img className="preview__img" src={previewImg} />
+            {
+              previewImg &&
+              <img className="preview__img" src={previewImg} />
+            }
 
             <label htmlFor="start_date">วันที่เริ่มกิจกรรม</label>
             <input

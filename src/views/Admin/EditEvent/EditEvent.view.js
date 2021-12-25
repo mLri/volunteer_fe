@@ -3,6 +3,12 @@ import { useHistory } from 'react-router'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
+import { EditorState, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
+
+
+
 import { URL_API } from '../../../global_variable'
 
 /* import css */
@@ -24,14 +30,23 @@ function EditEvent() {
   const [state, setState] = useState({
     _id: '',
     name: '',
-    detail: '',
+    detail: EditorState.createEmpty(),
     start_date: '',
     end_date: '',
     unit_per_day: 0,
     calendars: [],
     image: ''
   })
-  const [initState, setInitState] = useState('')
+  const [initState, setInitState] = useState({
+    _id: '',
+    name: '',
+    detail: EditorState.createEmpty(),
+    start_date: '',
+    end_date: '',
+    unit_per_day: 0,
+    calendars: [],
+    image: ''
+  })
   const [img, setImg] = useState(null)
   const [previewImg, setPreviewImg] = useState(null)
   const [isEditCalendar, setIsEditCalendar] = useState(false)
@@ -67,11 +82,16 @@ function EditEvent() {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      const get_event = await axios.get(`${URL_API}/events/${event_id}`, { headers })
+      let get_event = await axios.get(`${URL_API}/events/${event_id}`, { headers })
+      get_event.data.detail = EditorState.createWithContent(
+        convertFromRaw(JSON.parse(get_event.data.detail))
+      )
 
       setState(get_event.data)
       /* clone data for cancel event */
-      setInitState(JSON.parse(JSON.stringify(get_event.data)))
+      let clone_state = Object.assign({}, get_event.data)
+      setInitState(clone_state)
+      // setInitState(JSON.parse(JSON.stringify(get_event.data)))
     } catch (error) {
       if (error.response.data.message === 'jwt expired' || error.response.data.message === 'jwt malformed' || error.response.data.message === 'invalid signature' || error.response.data.message === 'Unauthorized') {
         localStorage.removeItem('token')
@@ -192,7 +212,7 @@ function EditEvent() {
     if (img) formData.append('image', img, img.name)
 
     formData.append('name', state.name)
-    formData.append('detail', state.detail)
+    formData.append('detail', JSON.stringify(convertToRaw(state.detail.getCurrentContent())))
     formData.append('start_date', state.start_date)
     formData.append('end_date', state.end_date)
     formData.append('unit_per_day', state.unit_per_day)
@@ -212,7 +232,9 @@ function EditEvent() {
 
     setIsEditCalendar(false)
     /* clone data cuz we don't want relation object */
-    setState(JSON.parse(JSON.stringify(initState)))
+    let clone_state = Object.assign({}, initState);
+    setState(clone_state)
+    // setState(JSON.parse(JSON.stringify(initState)))
     window.scrollTo({
       top: 0,
       behavior: "smooth"
@@ -222,6 +244,13 @@ function EditEvent() {
   const handleOnUploadImg = async (e) => {
     setPreviewImg(URL.createObjectURL(e.target.files[0]))
     setImg(e.target.files[0])
+  }
+
+  const onEditorStateChange = (edit) => {
+    setState({
+      ...state,
+      detail: edit
+    })
   }
 
   return (
@@ -240,12 +269,24 @@ function EditEvent() {
               handleOnChangeFunc={handleInputChangeFunc} />
 
             <label htmlFor="detail">รายละเอียดกิจกรรม</label>
-            <textarea
+            <Editor
+              editorStyle={{ border: "1px solid #F1F1F1" }}
+              editorState={state.detail}
+              wrapperClassName="wrapper-class"
+              editorClassName="editor-class"
+              toolbarClassName="toolbar-class"
+              onEditorStateChange={onEditorStateChange}
+            />
+            {/* <textarea
+              disabled
+              value={draftToHtml(convertToRaw(state.detail.getCurrentContent()))}
+            /> */}
+            {/* <textarea
               onChange={handleInputChangeFunc}
               value={state.detail}
               name="detail"
               cols="30"
-              rows="5"></textarea>
+              rows="5"></textarea> */}
 
             <label htmlFor="image">รูปกิจกรรม</label>
             <Upload

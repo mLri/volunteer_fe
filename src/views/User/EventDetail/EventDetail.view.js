@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
+// import { convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+
+
 import { URL_API } from '../../../global_variable'
 import { MdClear } from 'react-icons/md'
 
@@ -138,7 +144,10 @@ function EventDetail() {
   }
 
   function createMarkup() {
-    return {__html: '<svg onload=alert(1337)>'};
+    const ct = EditorState.createWithContent(
+      convertFromRaw(JSON.parse(event.detail))
+    )
+    return {__html: draftToHtml(convertToRaw(ct.getCurrentContent()))}
   }
 
   return (
@@ -148,126 +157,129 @@ function EventDetail() {
           <img src={`${URL_API}/events/files/img/${event_id}`} alt="" />
         </div>
         <div className="event__detail__detail">
-          <div dangerouslySetInnerHTML={createMarkup()}></div>
-        {/* <p>
+          {
+            event.detail &&
+            <div dangerouslySetInnerHTML={createMarkup()}></div>
+          }
+          {/* <p>
             {
               event.detail
             }
           </p> */}
-      </div>
-      <div className="event__detail__period">
-        <p>กิจกรรมเริ่มวันที่ : {new Date(event.start_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-        <p>กิจกรรมสิ้นสุดวันที่ : {new Date(event.end_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-      </div>
-      <div className="event__detail__calendar__tap">
-        {
-          event.calendars &&
-          event.calendars.map((val, index) => {
-            return (
-              <div
-                onClick={() => handleClickTap(index)}
-                key={index}
-                className="tap">
-                {monthToString(new Date(val.date).getMonth())}
-              </div>
-            )
-          })
-        }
-      </div>
-      <div className="event__detail__calendar">
-        {
-          event.calendars &&
-          <CalendarEventPreview
-            handleClickFunc={handleCalendarPreviewClick}
-            amont={event.unit_per_day}
-            date={event.calendars[calendarIdx].date}
-            date_of_month={event.calendars[calendarIdx].date_of_month} />
-        }
-      </div>
-    </div>
-
-      {
-    showModal &&
-      < div className="modal__book__event">
-        <div className="modal__book__content">
-          <div onClick={handleClearModal} className="modal__book__clear">
-            <MdClear color="red" size="2em" />
-          </div>
-          <div className="modal__book__event__head">
-            <h2>ลงทะเบียนจิตอาสา</h2>
-          </div>
-          <div className="modal__book__event__body">
-            <form onSubmit={handleSubmitBookEvent}>
-              <label htmlFor="employee_id">รหัสพนักงาน</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.employee_id}
-                name="employee_id"
-                placeholder="รหัสพนักงาน" />
-
-              <label htmlFor="prefix">คำนำหน้า</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.prefix}
-                name="prefix"
-                placeholder="นาย / นาง / นางสาว" />
-
-              <label htmlFor="firstname">ชื่อ</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.firstname}
-                name="firstname"
-                placeholder="ชื่อ" />
-
-              <label htmlFor="lastname">นามสกุล</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.lastname}
-                name="lastname"
-                placeholder="นามสกุล" />
-
-              <label htmlFor="institution">สังกัด</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.institution}
-                name="institution"
-                placeholder="ศคบ" />
-
-              <label htmlFor="tel">เบอร์โทร</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.tel}
-                name="tel"
-                placeholder="09x-xxxxxxx" />
-
-              <label htmlFor="date_time">วันที่อาสา</label>
-              <Input
-                handleOnChangeFunc={handleInputChange}
-                value={state.date_time.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
-                readOnly
-                name="date_time" />
-
-              <div className="modal__book__event__btn">
-                <div className="btn__submit">
-                  <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
+        </div>
+        <div className="event__detail__period">
+          <p>กิจกรรมเริ่มวันที่ : {new Date(event.start_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p>กิจกรรมสิ้นสุดวันที่ : {new Date(event.end_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        </div>
+        <div className="event__detail__calendar__tap">
+          {
+            event.calendars &&
+            event.calendars.map((val, index) => {
+              return (
+                <div
+                  onClick={() => handleClickTap(index)}
+                  key={index}
+                  className="tap">
+                  {monthToString(new Date(val.date).getMonth())}
                 </div>
-              </div>
-
-            </form>
-          </div>
+              )
+            })
+          }
+        </div>
+        <div className="event__detail__calendar">
+          {
+            event.calendars &&
+            <CalendarEventPreview
+              handleClickFunc={handleCalendarPreviewClick}
+              amont={event.unit_per_day}
+              date={event.calendars[calendarIdx].date}
+              date_of_month={event.calendars[calendarIdx].date_of_month} />
+          }
         </div>
       </div>
-  }
 
-  {
-    showModalAlertError &&
-      <ModalAlert message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
-  }
+      {
+        showModal &&
+        < div className="modal__book__event">
+          <div className="modal__book__content">
+            <div onClick={handleClearModal} className="modal__book__clear">
+              <MdClear color="red" size="2em" />
+            </div>
+            <div className="modal__book__event__head">
+              <h2>ลงทะเบียนจิตอาสา</h2>
+            </div>
+            <div className="modal__book__event__body">
+              <form onSubmit={handleSubmitBookEvent}>
+                <label htmlFor="employee_id">รหัสพนักงาน</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.employee_id}
+                  name="employee_id"
+                  placeholder="รหัสพนักงาน" />
 
-  {
-    showModalAlertSuccess &&
-      <ModalAlert type="success" message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
-  }
+                <label htmlFor="prefix">คำนำหน้า</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.prefix}
+                  name="prefix"
+                  placeholder="นาย / นาง / นางสาว" />
+
+                <label htmlFor="firstname">ชื่อ</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.firstname}
+                  name="firstname"
+                  placeholder="ชื่อ" />
+
+                <label htmlFor="lastname">นามสกุล</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.lastname}
+                  name="lastname"
+                  placeholder="นามสกุล" />
+
+                <label htmlFor="institution">สังกัด</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.institution}
+                  name="institution"
+                  placeholder="ศคบ" />
+
+                <label htmlFor="tel">เบอร์โทร</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.tel}
+                  name="tel"
+                  placeholder="09x-xxxxxxx" />
+
+                <label htmlFor="date_time">วันที่อาสา</label>
+                <Input
+                  handleOnChangeFunc={handleInputChange}
+                  value={state.date_time.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  readOnly
+                  name="date_time" />
+
+                <div className="modal__book__event__btn">
+                  <div className="btn__submit">
+                    <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      }
+
+      {
+        showModalAlertError &&
+        <ModalAlert message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
+      }
+
+      {
+        showModalAlertSuccess &&
+        <ModalAlert type="success" message={messageAlert} handleCloseModalFn={handleCloseModalAlertFn} />
+      }
 
     </div >
   )
