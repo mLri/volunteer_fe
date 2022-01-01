@@ -147,7 +147,10 @@ function EventDetail() {
     const ct = EditorState.createWithContent(
       convertFromRaw(JSON.parse(event.detail))
     )
-    return {__html: draftToHtml(convertToRaw(ct.getCurrentContent()))}
+    let plaintext = draftToHtml(convertToRaw(ct.getCurrentContent()))
+    const regx = /<p><\/p>/gm
+    let replace_p_to_br = plaintext.replace(regx, '<p><br></p>')
+    return {__html: replace_p_to_br}
   }
 
   return (

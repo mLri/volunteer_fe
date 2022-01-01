@@ -30,7 +30,11 @@
 }
 
 .event__detail__detail p {
-  /* text-indent: 2em; */
+  margin-bottom: 10px;
+}
+
+.event__detail__detail ol {
+  padding-left: 15px;
 }
 
 .event__detail__period {
