@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router'
 
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { URL_API } from '../../../global_variable'
@@ -34,7 +33,7 @@ function CreateEvent() {
     image: ''
   })
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   const [img, setImg] = useState(null)
   const [previewImg, setPreviewImg] = useState(null)
@@ -128,10 +127,6 @@ function CreateEvent() {
   }
 
   const handleClickCalendarStartDateFunc = (date) => {
-    // console.log('year -> ', date.getFullYear())
-    // console.log('month -> ', date.getMonth())
-    // console.log('date => ', date.getDate())
-    // console.log('start_date -> ', new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`))
     setState({
       ...state,
       // start_date: new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`)
@@ -246,10 +241,10 @@ function CreateEvent() {
               toolbarClassName="toolbar-class"
               onEditorStateChange={onEditorStateChange}
             />
-            <textarea
+            {/* <textarea
               disabled
               value={draftToHtml(convertToRaw(state.detail.getCurrentContent()))}
-            />
+            /> */}
             {/* <textarea
               onChange={handleInputChangeFunc}
               value={state.detail}

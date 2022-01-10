@@ -79,7 +79,7 @@ function Home(props) {
                     <td>{val.name}</td>
                     <td>
                       <Link to={`/admin/events/${val._id}/book`}>
-                        รายละเอียด
+                        รายชื่อผู้ลงทะเบียน
                       </Link>
                     </td>
                     <td style={{ textAlign: 'center' }}>

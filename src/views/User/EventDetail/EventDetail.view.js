@@ -2,11 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-// import { convertToRaw } from 'draft-js';
-import { EditorState, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
-
 
 import { URL_API } from '../../../global_variable'
 import { MdClear } from 'react-icons/md'
@@ -136,7 +133,7 @@ function EventDetail() {
       setTimeout(function () {
         setShowModalAlertSuccess(false)
         setMessageAlert('')
-      }, 2000)
+      }, 1500)
     } catch (error) {
       setMessageAlert(error.response.data.message)
       setShowModalAlertError(true)
@@ -157,7 +154,7 @@ function EventDetail() {
     <div className="event__detail__container">
       <div className="event__detail__content">
         <div className="event__detail__img">
-          <img src={`${URL_API}/events/files/img/${event_id}`} alt="" />
+          <img src={`${URL_API}/events/files/img/${event_id}/${Math.floor(Math.random() * 100)}`} alt="" />
         </div>
         <div className="event__detail__detail">
           {

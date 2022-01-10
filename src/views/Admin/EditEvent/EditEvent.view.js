@@ -3,11 +3,8 @@ import { useHistory } from 'react-router'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 
-import { EditorState, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
-
-
 
 import { URL_API } from '../../../global_variable'
 
@@ -234,11 +231,12 @@ function EditEvent() {
     /* clone data cuz we don't want relation object */
     let clone_state = Object.assign({}, initState);
     setState(clone_state)
-    // setState(JSON.parse(JSON.stringify(initState)))
     window.scrollTo({
       top: 0,
       behavior: "smooth"
     })
+    /* clear image preview */
+    setPreviewImg(URL.revokeObjectURL(previewImg))
   }
 
   const handleOnUploadImg = async (e) => {
@@ -281,17 +279,11 @@ function EditEvent() {
               disabled
               value={draftToHtml(convertToRaw(state.detail.getCurrentContent()))}
             /> */}
-            {/* <textarea
-              onChange={handleInputChangeFunc}
-              value={state.detail}
-              name="detail"
-              cols="30"
-              rows="5"></textarea> */}
 
             <label htmlFor="image">รูปกิจกรรม</label>
             <Upload
               handleOnChangeFunc={handleOnUploadImg} />
-            <img className="preview__img" src={previewImg || `${URL_API}/events/files/img/${state._id}`} />
+            <img className="preview__img" src={previewImg || `${URL_API}/events/files/img/${state._id}/${Math.floor(Math.random() * 100)}`} />
 
             <label htmlFor="start_date">วันที่เริ่มกิจกรรม</label>
             <input

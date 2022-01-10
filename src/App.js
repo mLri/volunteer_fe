@@ -24,9 +24,10 @@ import EventDetail from './views/User/EventDetail/EventDetail.view'
 import Navbar from './components/Navbar/Nav.component'
 import LogoutButton from './components/LogoutButton/LogoutButton.component'
 
-function App(props) {
+/* import private route */
+import PrivateRoute from './routes/private.route'
 
-  console.log('render App')
+function App(props) {
 
   useEffect(() => {
     const get_token = localStorage.getItem('token')
@@ -47,12 +48,17 @@ function App(props) {
         </div>
         <Switch>
           <Route path="/" exact render={()=> (<HomeUser />)} />
-          <Route path="/admin" exact render={() => (<Home />)} />
+          <PrivateRoute component={Home} path="/admin" exact />
+          {/* <Route path="/admin" exact render={() => (<Home />)} /> */}
           <Route path="/login" render={() => (<Login />)} />
-          <Route path="/admin/events/create" render={() => (<CreateEvent />)} /> 
-          <Route path="/admin/events/:event_id/edit" render={() => (<EditEvent />)} /> 
-          <Route path="/admin/events/:event_id/book" exact render={() => (<EventBook />)} /> 
-          <Route path="/admin/events/:event_id/book/:book_event_id/edit" render={() => (<EventBookEdit />)} /> 
+          <PrivateRoute component={CreateEvent} path="/admin/events/create" />
+          {/* <Route path="/admin/events/create" render={() => (<CreateEvent />)} />  */}
+          <PrivateRoute component={EditEvent} path="/admin/events/:event_id/edit" />
+          {/* <Route path="/admin/events/:event_id/edit" render={() => (<EditEvent />)} />  */}
+          <PrivateRoute component={EventBook} path="/admin/events/:event_id/book" exact />
+          {/* <Route path="/admin/events/:event_id/book" exact render={() => (<EventBook />)} />  */}
+          <PrivateRoute component={EventBookEdit} path="/admin/events/:event_id/book/:book_event_id/edit" />
+          {/* <Route path="/admin/events/:event_id/book/:book_event_id/edit" render={() => (<EventBookEdit />)} />  */}
           <Route path="/detail/:event_id" render={() => (<EventDetail />)} />
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>

@@ -36,7 +36,6 @@ function Home() {
   }
 
   const handleClickCard = (id) => {
-    console.log('click card -> ', id)
     history.push(`/detail/${id}`)
   }
 
@@ -47,7 +46,7 @@ function Home() {
           events &&
           events.map((val, index) => (
             <div className="card" key={index}>
-              <Card img_url={`${URL_API}/events/files/img/${val._id}`} title={val.name} handleClick={() => handleClickCard(val._id)} />
+              <Card img_url={`${URL_API}/events/files/img/${val._id}/${Math.floor(Math.random() * 100)}`} title={val.name} handleClick={() => handleClickCard(val._id)} />
             </div>
           ))
         }
