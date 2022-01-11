@@ -6,7 +6,7 @@ import img_default from '../../img_default.png'
 /* import components */
 import Button from '../Button/Button.component'
 
-function Card({ img_url = null, title, handleClick = () => null }) {
+function Card({ img_url = null, title, show_status = false, status = true, handleClick = () => null }) {
   return (
     <div className="card__container">
       <div className="card__image">
@@ -20,6 +20,18 @@ function Card({ img_url = null, title, handleClick = () => null }) {
           bgc="rgb(63 131 255)"
           color="#ffffff" />
       </div>
+      {
+        show_status &&
+        <div className="card__status">
+          {
+            status ?
+              <span className="card__status__process">Process</span>
+              :
+              <span className="card__status__done">Done</span>
+          }
+        </div>
+      }
+      
     </div>
   )
 }

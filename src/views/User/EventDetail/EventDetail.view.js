@@ -42,6 +42,8 @@ function EventDetail() {
     date_time: ''
   })
 
+  const [bookEvent, setBookEvent] = useState([])
+
   useEffect(() => {
     getEvent()
   }, [])
@@ -56,6 +58,11 @@ function EventDetail() {
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
     const event = await axios.get(`${URL_API}/events/${event_id}`, { headers })
+
+    if (event.data && !event.data.success_status) {
+      const book_event = await axios.get(`${URL_API}/book_events?event_id=${event_id}`, { headers })
+      setBookEvent(book_event.data)
+    }
     setEvent(event.data)
   }
 
@@ -147,7 +154,7 @@ function EventDetail() {
     let plaintext = draftToHtml(convertToRaw(ct.getCurrentContent()))
     const regx = /<p><\/p>/gm
     let replace_p_to_br = plaintext.replace(regx, '<p><br></p>')
-    return {__html: replace_p_to_br}
+    return { __html: replace_p_to_br }
   }
 
   return (
@@ -161,41 +168,76 @@ function EventDetail() {
             event.detail &&
             <div dangerouslySetInnerHTML={createMarkup()}></div>
           }
-          {/* <p>
-            {
-              event.detail
-            }
-          </p> */}
         </div>
         <div className="event__detail__period">
           <p>กิจกรรมเริ่มวันที่ : {new Date(event.start_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           <p>กิจกรรมสิ้นสุดวันที่ : {new Date(event.end_date).toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
         </div>
-        <div className="event__detail__calendar__tap">
-          {
-            event.calendars &&
-            event.calendars.map((val, index) => {
-              return (
-                <div
-                  onClick={() => handleClickTap(index)}
-                  key={index}
-                  className="tap">
-                  {monthToString(new Date(val.date).getMonth())}
-                </div>
-              )
-            })
-          }
-        </div>
-        <div className="event__detail__calendar">
-          {
-            event.calendars &&
-            <CalendarEventPreview
-              handleClickFunc={handleCalendarPreviewClick}
-              amont={event.unit_per_day}
-              date={event.calendars[calendarIdx].date}
-              date_of_month={event.calendars[calendarIdx].date_of_month} />
-          }
-        </div>
+
+        {
+          event.success_status ?
+            <>
+              <div className="event__detail__calendar__tap">
+                {
+                  event.calendars &&
+                  event.calendars.map((val, index) => {
+                    return (
+                      <div
+                        onClick={() => handleClickTap(index)}
+                        key={index}
+                        className="tap">
+                        {monthToString(new Date(val.date).getMonth())}
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              <div className="event__detail__calendar">
+                {
+                  event.calendars &&
+                  <CalendarEventPreview
+                    handleClickFunc={handleCalendarPreviewClick}
+                    amont={event.unit_per_day}
+                    date={event.calendars[calendarIdx].date}
+                    date_of_month={event.calendars[calendarIdx].date_of_month} />
+                }
+              </div>
+            </>
+            :
+            <>
+              <h2>รายชื่อผู้ลงทะเบียน</h2>
+              <br />
+              <table>
+                <thead>
+                  <tr>
+                    <th>รหัสพนักงาน</th>
+                    <th>คำนำหน้า</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
+                    <th>สังกัด</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    bookEvent.length ?
+                      bookEvent.map((val, index) => (
+                        <tr key={index}>
+                          <td>{val.employee_id}</td>
+                          <td>{val.prefix}</td>
+                          <td>{val.firstname}</td>
+                          <td>{val.lastname}</td>
+                          <td>{val.institution}</td>
+                        </tr>
+                      ))
+                      :
+                      <tr>
+                        <td colSpan="5" style={{ textAlign: 'center' }}>empty data</td>
+                      </tr>
+                  }
+                </tbody>
+              </table>
+            </>
+        }
       </div>
 
       {

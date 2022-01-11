@@ -33,3 +33,26 @@
   background-color: rgb(19 102 255) !important;
   cursor: pointer;
 }
+
+.card__status {
+  display: flex;
+  justify-content: right;
+  margin-right: 20px;
+  margin-bottom: 15px;
+}
+
+.card__status__process {
+  padding: 5px;
+  background-color: green;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.card__status__done {
+  padding: 5px;
+  background-color: blue;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 10px;
+}
