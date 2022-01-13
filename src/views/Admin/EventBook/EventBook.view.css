@@ -10,6 +10,7 @@
   margin: 0 auto;
   background-color: #ffffff;
   padding: 40px;
+  box-shadow: 3px 5px 5px gray;
 }
 
 .event__book__header {

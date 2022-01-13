@@ -28,6 +28,7 @@ tbody tr:nth-child(even) {
   margin: 0 auto;
   background-color: #ffffff;
   padding: 40px;
+  box-shadow: 3px 5px 5px gray;
 }
 
 .event__header {
@@ -110,18 +111,18 @@ tbody tr:nth-child(even) {
   transition: .4s;
 }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
 input:focus + .slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+.checked:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+.checked {
+  background-color: #2196F3;
 }
 
 /* Rounded sliders */

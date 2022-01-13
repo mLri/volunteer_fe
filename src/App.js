@@ -44,21 +44,16 @@ function App(props) {
       <Router>
         <div className="navbar__container">
           <Navbar logo={logo} title='Volunteer register' />
-          <LogoutButton title='Logout' logout_to='/login' isLogin={props.auth.isLogin} handleLogout={handleLogout} />
+          <LogoutButton title='Log out' logout_to='/login' isLogin={props.auth.isLogin} handleLogout={handleLogout} />
         </div>
         <Switch>
           <Route path="/" exact render={()=> (<HomeUser />)} />
           <PrivateRoute component={Home} path="/admin" exact />
-          {/* <Route path="/admin" exact render={() => (<Home />)} /> */}
           <Route path="/login" render={() => (<Login />)} />
           <PrivateRoute component={CreateEvent} path="/admin/events/create" />
-          {/* <Route path="/admin/events/create" render={() => (<CreateEvent />)} />  */}
           <PrivateRoute component={EditEvent} path="/admin/events/:event_id/edit" />
-          {/* <Route path="/admin/events/:event_id/edit" render={() => (<EditEvent />)} />  */}
           <PrivateRoute component={EventBook} path="/admin/events/:event_id/book" exact />
-          {/* <Route path="/admin/events/:event_id/book" exact render={() => (<EventBook />)} />  */}
           <PrivateRoute component={EventBookEdit} path="/admin/events/:event_id/book/:book_event_id/edit" />
-          {/* <Route path="/admin/events/:event_id/book/:book_event_id/edit" render={() => (<EventBookEdit />)} />  */}
           <Route path="/detail/:event_id" render={() => (<EventDetail />)} />
           <Route path="*" render={() => <h1>Page not found</h1>} />
         </Switch>

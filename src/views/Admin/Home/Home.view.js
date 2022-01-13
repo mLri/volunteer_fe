@@ -4,7 +4,7 @@ import { useHistory } from 'react-router'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
-import { faTrashAlt, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faEdit, faPlus, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { URL_API } from '../../../global_variable'
@@ -12,15 +12,23 @@ import { URL_API } from '../../../global_variable'
 /* import css */
 import './Home.view.css'
 
+/* import components */
+import Pagination from '../../../components/Pagination/Pagination.component'
+
 function Home(props) {
 
   let history = useHistory()
 
   const [state, setState] = useState([])
 
+  const [totalPage, setTotalPage] = useState(0)
+  const [pageCurent, setPageCurent] = useState(1)
+
+  const limit = 2
+
   useEffect(() => {
     getEvents()
-  }, [])
+  }, [pageCurent])
 
   const getEvents = async () => {
     try {
@@ -28,10 +36,13 @@ function Home(props) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      const get_events = await axios.get(`${URL_API}/events?fields=_id,name,success_status`, { headers })
-
-      // props.dispatch({ type: 'SET_EVENTS', payload: get_events.data })
+      const get_events = await axios.get(`${URL_API}/events?fields=_id,name,success_status&limit=${limit}&page=${pageCurent}&sorted_order=desc`, { headers })
       setState(get_events.data)
+      // props.dispatch({ type: 'SET_EVENTS', payload: get_events.data })
+
+      /* set pagination */
+      const get_events_total = await axios.get(`${URL_API}/events?total=true`, { headers })
+      if (get_events_total && get_events_total.data > 0) setTotalPage(Math.ceil(get_events_total.data / limit))
     } catch (error) {
       if (error.response.data.message === 'jwt expired' || error.response.data.message === 'jwt malformed' || error.response.data.message === 'invalid signature' || error.response.data.message === 'Unauthorized') {
         localStorage.removeItem('token')
@@ -48,16 +59,23 @@ function Home(props) {
       }
       await axios.delete(`${URL_API}/events/${event_id}`, { headers })
 
-      const delete_event = props.event.filter(val => val._id !== event_id)
+      const delete_event = state.filter(val => val._id !== event_id)
       setState(delete_event)
+
+      getEvents()
+  
+      if (pageCurent === 1 && delete_event.length === 0) {
+        getEvents()
+      } else if (pageCurent !== 1 && delete_event.length === 0) {
+        setPageCurent(pageCurent - 1)
+      }
       // props.dispatch({ type: 'SET_EVENTS', payload: delete_event })
     }
   }
 
   const toggleSuccessStatus = async (index) => {
-    const clone_state = state
-    clone_state[index].success_status = !state[index].success_status
-    setState(clone_state)
+    state[index].success_status = !state[index].success_status
+    setState([...state])
 
     const headers = {
       'Content-Type': 'application/json',
@@ -105,7 +123,7 @@ function Home(props) {
                         <input type="checkbox"
                           defaultChecked={val.success_status}
                           onChange={() => toggleSuccessStatus(index)} />
-                        <span className="slider round"></span>
+                        <span className={val.success_status ? 'slider round checked' : 'slider round'}></span>
                       </label>
                     </td>
                     <td style={{ textAlign: 'center' }}>
@@ -129,6 +147,11 @@ function Home(props) {
             }
           </tbody>
         </table>
+
+        <br/>
+
+        {(state.length != 0) && <Pagination totalPage={totalPage} pageCurent={pageCurent} setPageCurent={setPageCurent} />}
+
       </div>
     </div>
   )
