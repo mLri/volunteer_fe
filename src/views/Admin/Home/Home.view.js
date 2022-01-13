@@ -24,7 +24,7 @@ function Home(props) {
   const [totalPage, setTotalPage] = useState(0)
   const [pageCurent, setPageCurent] = useState(1)
 
-  const limit = 2
+  const limit = 5
 
   useEffect(() => {
     getEvents()
