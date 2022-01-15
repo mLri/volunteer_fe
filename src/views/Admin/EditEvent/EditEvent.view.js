@@ -18,6 +18,8 @@ import Button from '../../../components/Button/Button.component'
 import CalendarPreview from '../../../components/CalendarPreview/CalendarPreview.component'
 import Upload from '../../../components/Upload/Upload.component'
 
+import img_default from '../../../img_default.png'
+
 function EditEvent() {
 
   let history = useHistory()
@@ -283,7 +285,17 @@ function EditEvent() {
             <label htmlFor="image">รูปกิจกรรม</label>
             <Upload
               handleOnChangeFunc={handleOnUploadImg} />
-            <img className="preview__img" src={previewImg || `${URL_API}/events/files/img/${state._id}/${Math.floor(Math.random() * 100)}`} />
+            {
+              previewImg
+                ?
+                <img className="preview__img" src={previewImg} />
+                :
+                (state && state.image) 
+                  ?
+                  <img className="preview__img" src={`${URL_API}/events/files/img/${state.image.name}` || img_default} />
+                  :
+                  <img className="preview__img" src={img_default} />
+            }
 
             <label htmlFor="start_date">วันที่เริ่มกิจกรรม</label>
             <input

@@ -17,6 +17,8 @@ import Input from '../../../components/Input/Input.component'
 import Button from '../../../components/Button/Button.component'
 import ModalAlert from '../../../components/ModalAlert/ModalAlert.component'
 
+import img_default from '../../../img_default.png'
+
 function EventDetail() {
 
   const { event_id } = useParams()
@@ -161,7 +163,13 @@ function EventDetail() {
     <div className="event__detail__container">
       <div className="event__detail__content">
         <div className="event__detail__img">
-          <img src={`${URL_API}/events/files/img/${event_id}/${Math.floor(Math.random() * 100)}`} alt="" />
+          {
+            (event && event.image) 
+              ?
+              <img src={`${URL_API}/events/files/img/${event.image.name}`} alt="" />
+              :
+              <img src={img_default} />
+          }
         </div>
         <div className="event__detail__detail">
           {

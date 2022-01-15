@@ -47,7 +47,7 @@ function Home() {
           events.map((val, index) => (
             <div className="card" key={index}>
               <Card
-                img_url={`${URL_API}/events/files/img/${val._id}/${Math.floor(Math.random() * 100)}`}
+                img_url={(val.image) && `${URL_API}/events/files/img/${val.image.name}`}
                 title={val.name}
                 handleClick={() => handleClickCard(val._id)}
                 show_status={true}
