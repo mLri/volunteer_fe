@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import axios from 'axios'
 
+/* import components */
+import Pagination from '../../../components/Pagination/Pagination.component'
 
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
@@ -17,19 +19,28 @@ function EventBook() {
 
   const { event_id } = useParams()
 
-  const [state, setState] = useState('')
+  const [state, setState] = useState([])
+
+  const [totalPage, setTotalPage] = useState(0)
+  const [pageCurent, setPageCurent] = useState(1)
+
+  const limit = 5
 
   useEffect(() => {
     getBookEventList()
-  }, [])
+  }, [pageCurent])
 
   const getBookEventList = async () => {
     try {
       const headers = {
         'Content-Type': 'application/json',
       }
-      const get_book_events = await axios.get(`${URL_API}/book_events?event_id=${event_id}`, { headers })
+      const get_book_events = await axios.get(`${URL_API}/book_events?event_id=${event_id}&limit=${limit}&page=${pageCurent}`, { headers })
       setState(get_book_events.data)
+
+      /* set pagination */
+      const get_book_events_total = await axios.get(`${URL_API}/book_events?event_id&total=true`, { headers })
+      if (get_book_events_total && get_book_events_total.data > 0) setTotalPage(Math.ceil(get_book_events_total.data / limit))
     } catch (error) {
       console.log('error -> ', error)
     }
@@ -106,6 +117,10 @@ function EventBook() {
 
           </div>
         </div>
+
+        <br />
+
+        {(state.length != 0) && <Pagination totalPage={totalPage} pageCurent={pageCurent} setPageCurent={setPageCurent} />}
 
       </div>
     </div>

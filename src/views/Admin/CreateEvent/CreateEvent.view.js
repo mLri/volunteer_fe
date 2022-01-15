@@ -23,11 +23,13 @@ function CreateEvent() {
 
   let history = useHistory()
 
+  const date_now = new Date()
+
   const [state, setState] = useState({
     name: '',
     detail: EditorState.createEmpty(),
-    start_date: '',
-    end_date: '',
+    start_date: new Date(date_now.getFullYear(), date_now.getMonth(), date_now.getDate()),
+    end_date: new Date(date_now.getFullYear(), date_now.getMonth(), date_now.getDate()),
     unit_per_day: 1,
     calendars: [],
     image: ''
