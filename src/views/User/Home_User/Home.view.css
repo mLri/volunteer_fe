@@ -12,6 +12,115 @@
   padding: 40px 40px;
 }
 
+.home__filter {
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  /* align-items: right; */
+  padding-right: 50px;
+  padding-top: 20px;
+}
+
 .card {
   width: 100%;
+}
+
+.home__search {
+  padding: 5px 15px;
+  border-radius: 10px;
+  border: 1px solid #c4cad4;
+  outline: none;
+  margin-right: 10px;
+  background-color: #fff;
+}
+
+.home__search svg:hover {
+  cursor: pointer;
+}
+
+.home__search form {
+  margin: 0;
+}
+
+.home__search__input {
+  border: none;
+  outline: none;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.filter:hover {
+  border-radius: 5px;
+  border: 1px solid blue;
+  background-color: blue;
+  padding: 3px 5px;
+  color: #ffffff;
+}
+
+.filter__zone {
+  width: 100%;
+  height: 150px;
+  margin-top: 10px;
+  padding: 0 40px;
+}
+
+.filter__zone__head {
+  border-bottom: 1px solid #000000;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding-bottom: 5px;
+  font-weight: 600;
+}
+
+.filter__zone__body {
+  padding: 20px 0;
+  border-bottom: 1px solid #000000;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.filter__checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.filter__checkbox label {
+  margin: 0 0 0 5px;
+  padding: 0;
+}
+
+.filter__limit {
+  width: 40%;
+  padding: 3px;
+  outline: none;
+}
+
+.filter__controller {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.filter__buttom button {
+  padding: 5px 15px;
+  cursor: pointer;
+  background-color: rgb(0, 197, 0);
+  color: #ffffff;
+  border: none;
+}
+
+.filter__buttom button:hover {
+  background-color: green;
+}
+
+.empty__data {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
