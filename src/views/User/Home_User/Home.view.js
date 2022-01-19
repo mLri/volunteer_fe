@@ -24,6 +24,7 @@ function Home() {
   const [showFilter, setShowFilter] = useState(false)
   const [search, setSearch] = useState('')
   const [successStatus, setSuccessStatus] = useState('both')
+  const [sortBy, setSortBy] = useState('created_at')
 
   useEffect(() => {
     getListEvent()
@@ -35,7 +36,7 @@ function Home() {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-      const get_events = await axios.get(`${URL_API}/events?limit=${limit}&sorted_order=${sortOrder}&search=${search}&success_status=${successStatus}`, { headers })
+      const get_events = await axios.get(`${URL_API}/events?limit=${limit}&sorted_order=${sortOrder}&sorted_by=${sortBy}&search=${search}&success_status=${successStatus}`, { headers })
 
       setEvents(get_events.data)
     } catch (error) {
@@ -70,7 +71,9 @@ function Home() {
   }
 
   const handleChangeSortBy = (e) => {
-    setSortOrder(e.target.value)
+    const text_split = e.target.value.split('-')
+    setSortOrder(text_split[0])
+    setSortBy(text_split[1])
   }
 
   const handleChangeStatus = (e) => {
@@ -110,20 +113,20 @@ function Home() {
               <div className='filter__checkbox'>
                 <input
                   type="radio"
-                  value="asc"
+                  value="asc-created_at"
                   name="sortby"
-                  checked={sortOrder === 'asc'}
+                  checked={sortBy === 'created_at'}
                   onChange={handleChangeSortBy} />
                 <label>Last create</label>
               </div>
               <div className='filter__checkbox'>
                 <input
                   type="radio"
-                  value="desc"
+                  value="asc-end_date"
                   name="sortby"
-                  checked={sortOrder === 'desc'}
+                  checked={sortBy === 'end_date'}
                   onChange={handleChangeSortBy} />
-                <label>Old create</label>
+                <label>Expire soon</label>
               </div>
             </div>
             <div className="filter__checkbox__container">
