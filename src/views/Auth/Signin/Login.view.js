@@ -20,8 +20,12 @@ function Login(props) {
 
   useEffect(() => {
     /* check auth */
-    const get_token = props.auth.isLogin
-    if (get_token) history.push('/')
+    const get_token = localStorage.getItem('token')
+    if (get_token) {
+      let decode_token = jwt_decode(get_token)
+      if (decode_token.permissions === 'admin') history.push('/admin')
+      else history.push('/')
+    }
   }, [])
 
   const loginFunc = async (e) => {

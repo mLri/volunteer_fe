@@ -1,13 +1,17 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux'
+import jwt_decode from "jwt-decode"
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isLogin = rest.auth.isLogin
+  let isLogin
+  const token = localStorage.getItem('token')
+  if (token) {
+    const decode = jwt_decode(token)
+    isLogin = (decode.principal) ? true : false 
+  } else {
+    isLogin = false
+  }
   return (
-
-    // Show the component only when the user is logged in
-    // Otherwise, redirect the user to /signin page
     <Route {...rest} render={props => (
       isLogin ?
         <Component {...props} />
@@ -16,10 +20,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-const mapPropsToState = (state) => {
-  return {
-    auth: state.auth
-  }
-}
-
-export default connect(mapPropsToState)(PrivateRoute)
+export default PrivateRoute

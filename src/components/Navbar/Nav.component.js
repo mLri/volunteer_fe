@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 /* import css */
 import './Nav.component.css'
 
-function Navbar({ logo, title, role }) {
+function Navbar({ logo, title, auth }) {
   return (
     <div className="nav__container">
       <div className="nav__logo">
@@ -13,7 +13,7 @@ function Navbar({ logo, title, role }) {
       </div>
       <div className="nav__title">
         {
-          role === 'admin' ?
+          auth.permissions === 'admin' ?
             <Link to="/admin">{title}</Link>
             :
             <Link to='/'>{title}</Link>

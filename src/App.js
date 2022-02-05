@@ -49,13 +49,13 @@ function App(props) {
     <div className="app__container">
       <Router>
         <div className="navbar__container">
-          <Navbar logo={logo} title='Volunteer register' role={props.auth.role} />
+          <Navbar logo={logo} title='Volunteer register' />
           <LogoutButton title='Sign out' logout_to='/login' isLogin={props.auth.isLogin} handleLogout={handleLogout} />
         </div>
         <Switch>
           <Route path="/" exact render={() => (<HomeUser />)} />
-          <PrivateRoute component={Home} path="/admin" exact />
           <Route path="/login" render={() => (<Signin />)} />
+          <PrivateRoute component={Home} path="/admin" exact />
           <Route path="/signup" render={() => (<Signup />)} />
           <PrivateRoute component={CreateEvent} path="/admin/events/create" />
           <PrivateRoute component={EditEvent} path="/admin/events/:event_id/edit" />
