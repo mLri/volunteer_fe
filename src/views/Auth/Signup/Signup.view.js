@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { URL_API } from '../../../global_variable'
+import jwt_decode from "jwt-decode"
 
 /* import components */
 import Input from '../../../components/Input/Input.component'
@@ -238,12 +239,13 @@ function SignUp(props) {
 
           localStorage.setItem('token', login.data.access_token)
 
+          let decode_token = jwt_decode(login.data.access_token)
+
           props.dispatch({
             type: 'SIGNIN',
             payload: {
-              isLogin: true,
-              username: login.data.username,
-              role: login.data.role
+              ...decode_token,
+              isLogin: true
             }
           })
 

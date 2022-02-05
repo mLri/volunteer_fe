@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
-import jwt_decode from "jwt-decode";
+import jwt_decode from "jwt-decode"
 
 /* import css */
 import './App.css'
