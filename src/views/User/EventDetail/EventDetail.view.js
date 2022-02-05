@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { connect } from 'react-redux'
+
 
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -19,7 +21,7 @@ import ModalAlert from '../../../components/ModalAlert/ModalAlert.component'
 
 import img_default from '../../../img_default.png'
 
-function EventDetail() {
+function EventDetail(props) {
 
   const { event_id } = useParams()
 
@@ -31,7 +33,7 @@ function EventDetail() {
   const [showModalAlertError, setShowModalAlertError] = useState(false)
   const [showModalAlertSuccess, setShowModalAlertSuccess] = useState(false)
   const [messageAlert, setMessageAlert] = useState('')
-
+  const [showModalLoginAlert, setShowModalLoginAlert] = useState(false)
 
   const [state, setState] = useState({
     event_id: '',
@@ -48,7 +50,18 @@ function EventDetail() {
 
   useEffect(() => {
     getEvent()
-  }, [])
+    if (props.auth.isLogin) {
+      setState({
+        ...state,
+        employee_id: props.auth.principal.employee_id,
+        prefix: props.auth.principal.prefix,
+        firstname: props.auth.principal.first_name,
+        lastname: props.auth.principal.last_name,
+        institution: props.auth.principal.institution,
+        tel: props.auth.principal.tel,
+      })
+    }
+  }, [props])
 
   const monthToString = (index) => {
     return monthStringArr[index]
@@ -69,18 +82,23 @@ function EventDetail() {
   }
 
   const handleCalendarPreviewClick = (month, index, date, amont) => {
-    let date_obj = new Date(date)
-    setState({
-      ...state,
-      event_id: event._id,
-      date_time: `${date_obj.getFullYear()}-${date_obj.getMonth() + 1}-${date_obj.getDate()}`
-    })
-
-    if (amont === 0) {
-      //set full madal
+    if (!props.auth.isLogin) {
+      setShowModalLoginAlert(true)
     } else {
-      setShowModal(true)
+      let date_obj = new Date(date)
+      setState({
+        ...state,
+        event_id: event._id,
+        date_time: `${date_obj.getFullYear()}-${date_obj.getMonth() + 1}-${date_obj.getDate()}`
+      })
+
+      if (amont === 0) {
+        //set full madal
+      } else {
+        setShowModal(true)
+      }
     }
+
   }
 
   const handleClickTap = (index) => {
@@ -95,22 +113,23 @@ function EventDetail() {
   }
 
   const handleClearModal = () => {
-    setState({
-      event_id: '',
-      employee_id: '',
-      prefix: '',
-      firstname: '',
-      lastname: '',
-      institution: '',
-      tel: '',
-      date_time: ''
-    })
+    // setState({
+    //   event_id: '',
+    //   employee_id: '',
+    //   prefix: '',
+    //   firstname: '',
+    //   lastname: '',
+    //   institution: '',
+    //   tel: '',
+    //   date_time: ''
+    // })
     setShowModal(false)
   }
 
   const handleCloseModalAlertFn = () => {
     setShowModalAlertError(false)
     setShowModalAlertSuccess(false)
+    setShowModalLoginAlert(false)
     setMessageAlert('')
   }
 
@@ -119,22 +138,22 @@ function EventDetail() {
     try {
       const headers = {
         'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
       await axios.post(`${URL_API}/book_events`, { ...state }, { headers })
 
       getEvent()
 
-      setState({
-        event_id: '',
-        employee_id: '',
-        prefix: '',
-        firstname: '',
-        lastname: '',
-        institution: '',
-        tel: '',
-        date_time: ''
-      })
+      // setState({
+      //   event_id: '',
+      //   employee_id: '',
+      //   prefix: '',
+      //   firstname: '',
+      //   lastname: '',
+      //   institution: '',
+      //   tel: '',
+      //   date_time: ''
+      // })
       setShowModal(false)
       setShowModalAlertSuccess(true)
       setMessageAlert('Book success.')
@@ -164,7 +183,7 @@ function EventDetail() {
       <div className="event__detail__content">
         <div className="event__detail__img">
           {
-            (event && event.image) 
+            (event && event.image)
               ?
               <img src={`${URL_API}/events/files/img/${event.image.name}`} alt="" />
               :
@@ -249,76 +268,85 @@ function EventDetail() {
       </div>
 
       {
-        showModal &&
-        < div className="modal__book__event">
-          <div className="modal__book__content">
-            <div onClick={handleClearModal} className="modal__book__clear">
-              <MdClear color="red" size="2em" />
-            </div>
-            <div className="modal__book__event__head">
-              <h2>ลงทะเบียนจิตอาสา</h2>
-            </div>
-            <div className="modal__book__event__body">
-              <form onSubmit={handleSubmitBookEvent}>
-                <label htmlFor="employee_id">รหัสพนักงาน</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.employee_id}
-                  name="employee_id"
-                  placeholder="รหัสพนักงาน" />
+        showModalLoginAlert ?
+          <ModalAlert message='Please login!' handleCloseModalFn={handleCloseModalAlertFn} />
+          :
+          showModal &&
+          < div className="modal__book__event">
+            <div className="modal__book__content">
+              <div onClick={handleClearModal} className="modal__book__clear">
+                <MdClear color="red" size="2em" />
+              </div>
+              <div className="modal__book__event__head">
+                <h2>ลงทะเบียนจิตอาสา</h2>
+              </div>
+              <div className="modal__book__event__body">
+                <form onSubmit={handleSubmitBookEvent}>
+                  <label htmlFor="employee_id">รหัสพนักงาน</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.employee_id}
+                    name="employee_id"
+                    readOnly
+                    placeholder="รหัสพนักงาน" />
 
-                <label htmlFor="prefix">คำนำหน้า</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.prefix}
-                  name="prefix"
-                  placeholder="นาย / นาง / นางสาว" />
+                  <label htmlFor="prefix">คำนำหน้า</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.prefix}
+                    name="prefix"
+                    readOnly
+                    placeholder="นาย / นาง / นางสาว" />
 
-                <label htmlFor="firstname">ชื่อ</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.firstname}
-                  name="firstname"
-                  placeholder="ชื่อ" />
+                  <label htmlFor="firstname">ชื่อ</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.firstname}
+                    name="firstname"
+                    readOnly
+                    placeholder="ชื่อ" />
 
-                <label htmlFor="lastname">นามสกุล</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.lastname}
-                  name="lastname"
-                  placeholder="นามสกุล" />
+                  <label htmlFor="lastname">นามสกุล</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.lastname}
+                    name="lastname"
+                    readOnly
+                    placeholder="นามสกุล" />
 
-                <label htmlFor="institution">สังกัด</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.institution}
-                  name="institution"
-                  placeholder="ศคบ" />
+                  <label htmlFor="institution">สังกัด</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.institution}
+                    name="institution"
+                    readOnly
+                    placeholder="ศคบ" />
 
-                <label htmlFor="tel">เบอร์โทร</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.tel}
-                  name="tel"
-                  placeholder="09x-xxxxxxx" />
+                  <label htmlFor="tel">เบอร์โทร</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.tel}
+                    name="tel"
+                    readOnly
+                    placeholder="09x-xxxxxxx" />
 
-                <label htmlFor="date_time">วันที่อาสา</label>
-                <Input
-                  handleOnChangeFunc={handleInputChange}
-                  value={state.date_time.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  readOnly
-                  name="date_time" />
+                  <label htmlFor="date_time">วันที่อาสา</label>
+                  <Input
+                    handleOnChangeFunc={handleInputChange}
+                    value={state.date_time.toLocaleString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    readOnly
+                    name="date_time" />
 
-                <div className="modal__book__event__btn">
-                  <div className="btn__submit">
-                    <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
+                  <div className="modal__book__event__btn">
+                    <div className="btn__submit">
+                      <Button value="บันทึก" bgc="#2da44e" color="#ffffff" />
+                    </div>
                   </div>
-                </div>
 
-              </form>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
       }
 
       {
@@ -335,4 +363,10 @@ function EventDetail() {
   )
 }
 
-export default EventDetail
+const mapPropsToState = (state) => {
+  return {
+    auth: state.auth
+  }
+}
+
+export default connect(mapPropsToState)(EventDetail)

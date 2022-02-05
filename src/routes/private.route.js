@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-// import { isLogin } from '../utils';
+import { connect } from 'react-redux'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isLogin = localStorage.getItem('token')
+  const isLogin = rest.auth.isLogin
   return (
 
     // Show the component only when the user is logged in
@@ -16,4 +16,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default PrivateRoute;
+const mapPropsToState = (state) => {
+  return {
+    auth: state.auth
+  }
+}
+
+export default connect(mapPropsToState)(PrivateRoute)

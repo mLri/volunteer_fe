@@ -3,13 +3,12 @@ import { useState, useEffect } from 'react'
 /* import css */
 import './Input.component.css'
 
-function Input({ type = 'text', name = '', placeholder = '', value = '', onFocus = false, autoComplete = "off", readOnly = false, handleOnChangeFunc, handleOnClickFunc = () => null }) {
+function Input({ type = 'text', name = '', placeholder = '', value = '', autoComplete = "off", readOnly = false, handleOnChangeFunc, handleOnClickFunc = () => null }) {
 
   const [input, setInput] = useState('')
 
   useEffect(() => {
     setInput(value)
-    if (onFocus) document.querySelector('.input').focus()
   }, [value])
 
   const handleOnChange = (e) => {
@@ -18,7 +17,6 @@ function Input({ type = 'text', name = '', placeholder = '', value = '', onFocus
   }
 
   const handleOnClick = (e) => {
-    console.log('click ...')
     handleOnClickFunc(e)
   }
 

@@ -19,7 +19,7 @@ function Login(props) {
 
   useEffect(() => {
     /* check auth */
-    const get_token = localStorage.getItem('token')
+    const get_token = props.auth.isLogin
     if (get_token) history.push('/')
   }, [])
 
@@ -34,8 +34,17 @@ function Login(props) {
 
     localStorage.setItem('token', login.data.access_token)
 
-    props.dispatch({ type: 'SIGNIN' })
-    history.push('/admin')
+    props.dispatch({ 
+      type: 'SIGNIN', 
+      payload: { 
+        isLogin: true, 
+        username: login.data.username, 
+        role: login.data.role 
+      } 
+    })
+
+    if (login.data.role === 'admin') history.push('/admin')
+    else history.push('/')
   }
 
   const handleInputChangeFunc = (e) => {

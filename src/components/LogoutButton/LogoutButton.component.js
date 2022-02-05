@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
 
 /* import css */
 import './LogoutButton.component.css'
@@ -17,9 +19,13 @@ function LogoutButton({ title = 'logout', isLogin = false, logout_to = '/', hand
   return (
     <div className="logout">
       {
-        isLogin
-        &&
-        <span onClick={logoutFunction}>{title}</span>
+        !isLogin ?
+          <>
+            <span className="signin"><Link to="/login">Signin</Link></span>
+            <span className="signup"><Link to="/signup">singup</Link></span>
+          </>
+          :
+          <span className="logout" onClick={logoutFunction}>{title}</span>
       }
     </div>
   )

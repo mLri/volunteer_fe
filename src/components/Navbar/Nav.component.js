@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 /* import css */
 import './Nav.component.css'
 
-function Navbar({ logo, title }) {
-  const isAdmin = localStorage.getItem('token')
+function Navbar({ logo, title, role }) {
   return (
     <div className="nav__container">
       <div className="nav__logo">
@@ -13,7 +13,7 @@ function Navbar({ logo, title }) {
       </div>
       <div className="nav__title">
         {
-          isAdmin ?
+          role === 'admin' ?
             <Link to="/admin">{title}</Link>
             :
             <Link to='/'>{title}</Link>
@@ -23,4 +23,10 @@ function Navbar({ logo, title }) {
   )
 }
 
-export default Navbar
+const mapPropsToState = (state) => {
+  return {
+    auth: state.auth
+  }
+}
+
+export default connect(mapPropsToState)(Navbar)
