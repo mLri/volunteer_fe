@@ -18,7 +18,7 @@ function Home() {
 
   let history = useHistory()
 
-  const [events, setEvents] = useState('')
+  const [events, setEvents] = useState([])
   const [limit, setLimit] = useState(10)
   const [sortOrder, setSortOrder] = useState('asc')
   const [showFilter, setShowFilter] = useState(false)
@@ -172,23 +172,25 @@ function Home() {
       }
 
       {
-        events.length ?
-          <div className="home__content">
-            {
-              events.map((val, index) => (
-                <div className="card" key={index}>
-                  <Card
-                    img_url={(val.image) && `${URL_API}/events/files/img/${val.image.name}`}
-                    title={val.name}
-                    handleClick={() => handleClickCard(val._id)}
-                    show_status={true}
-                    status={val.success_status} />
-                </div>
-              ))
-            }
-          </div>
-          :
-          <div className='empty__data'>Empty data</div>
+        (events.length <= 0) ?
+          <div className="loading__data">Loading...</div>
+          : (events.length > 0) ?
+            <div className="home__content">
+              {
+                events.map((val, index) => (
+                  <div className="card" key={index}>
+                    <Card
+                      img_url={(val.image) && `${URL_API}/events/files/img/${val.image.name}`}
+                      title={val.name}
+                      handleClick={() => handleClickCard(val._id)}
+                      show_status={true}
+                      status={val.success_status} />
+                  </div>
+                ))
+              }
+            </div>
+            :
+            <div className='empty__data'>Empty data</div>
       }
 
     </div>

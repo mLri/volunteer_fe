@@ -124,3 +124,9 @@
   justify-content: center;
   margin-top: 50px;
 }
+
+.loading__data {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
