@@ -180,7 +180,7 @@ function Home() {
                 events.map((val, index) => (
                   <div className="card" key={index}>
                     <Card
-                      img_url={(val.image) && `${URL_API}/events/files/img/${val.image.name}`}
+                      img_url={(val.image) && `${URL_API}/events/files/img/s/${val.image_s.name}`}
                       title={val.name}
                       handleClick={() => handleClickCard(val._id)}
                       show_status={true}
