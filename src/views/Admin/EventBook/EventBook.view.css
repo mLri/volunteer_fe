@@ -77,3 +77,8 @@
 .event__book__table__delete svg:hover {
   color: rgb(255, 0, 0) !important;
 }
+
+.event__book__export {
+  text-align: right;
+  margin-bottom: 5px;
+}

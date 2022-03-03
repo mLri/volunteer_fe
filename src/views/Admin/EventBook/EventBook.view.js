@@ -58,6 +58,9 @@ function EventBook() {
     }
   }
 
+  const url_download_pdf = `${URL_API}/book_events/download/pdf?event_id=${event_id}&fields=employee_id,prefix,firstname,lastname,institution,tel,date_time`
+  const url_download_excel = `${URL_API}/book_events/download/excel?event_id=${event_id}&fields=employee_id,prefix,firstname,lastname,institution,tel,date_time`
+
   return (
     <div className="event__book__container">
       <div className="event__book__content">
@@ -66,6 +69,14 @@ function EventBook() {
         </div>
 
         <div className="event__book__body">
+
+          {
+            (state.length > 0) &&
+            <div className="event__book__export">
+              <a href={url_download_pdf}>export PDF</a> | <a href={url_download_excel}>export Excel</a>
+            </div>
+          }
+
           <div className="event__book__table">
 
             <div className="event__book__table__head">
@@ -86,32 +97,32 @@ function EventBook() {
             <div className="event__book__table__body">
               {
                 state.length ?
-                state.map((val, index) => (
-                  <div className="event__book__table__body__row" key={index}>
-                    <div className="event__book__table__body__colum">
-                      {val.prefix}
-                    </div>
-                    <div className="event__book__table__body__colum">
-                      {val.firstname} {val.lastname}
-                    </div>
-                    <div className="event__book__table__body__colum">
-                      <div className="event__book__table__edit">
-                        <Link to={`/admin/events/${val.event_id}/book/${val._id}/edit`}>
-                          <FaEdit color="blue" size="1.5em" />
-                        </Link>
+                  state.map((val, index) => (
+                    <div className="event__book__table__body__row" key={index}>
+                      <div className="event__book__table__body__colum">
+                        {val.prefix}
+                      </div>
+                      <div className="event__book__table__body__colum">
+                        {val.firstname} {val.lastname}
+                      </div>
+                      <div className="event__book__table__body__colum">
+                        <div className="event__book__table__edit">
+                          <Link to={`/admin/events/${val.event_id}/book/${val._id}/edit`}>
+                            <FaEdit color="blue" size="1.5em" />
+                          </Link>
+                        </div>
+                      </div>
+                      <div className="event__book__table__body__colum">
+                        <div className="event__book__table__body__colum__delete">
+                          <span onClick={() => deleteEvent(val._id)} className="event__book__table__delete">
+                            <MdDelete color="#ff6565" size="1.5em" />
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="event__book__table__body__colum">
-                      <div className="event__book__table__body__colum__delete">
-                        <span onClick={() => deleteEvent(val._id)} className="event__book__table__delete">
-                          <MdDelete color="#ff6565" size="1.5em" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-                :
-                <div className="event__book__table__body__colum__empty">empty data</div>
+                  ))
+                  :
+                  <div className="event__book__table__body__colum__empty">empty data</div>
               }
             </div>
 
